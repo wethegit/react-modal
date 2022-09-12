@@ -1,0 +1,6 @@
+.eslintrc.yml
+.github
+.prettierignore
+.prettierrc.yml
+.stylelintrc.yml
+src
