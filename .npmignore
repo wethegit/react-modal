@@ -1,6 +1,7 @@
 .eslintrc.yml
 .github
+.nvmrc
 .prettierignore
 .prettierrc.yml
-.stylelintrc.yml
+.vscode
 src

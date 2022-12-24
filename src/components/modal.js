@@ -1,14 +1,17 @@
+// third-party
 import ReactDOM from "react-dom"
 import { useCallback, useEffect, useRef, useState } from "react"
 import PropTypes from "prop-types"
 import clsx from "clsx"
 
-import usePreventScroll from "../../hooks/use-prevent-scroll"
+// hooks
+import { useUserPrefs, usePreventScroll } from "@wethegit/react-hooks"
 import useLocale from "../../hooks/use-locale"
-import useUserPrefs from "../../hooks/use-user-prefs"
 
+// components
 import IconButton from "../icon-button/icon-button"
 
+// styles
 import * as styles from "./modal.module.scss"
 
 export default function Modal({
