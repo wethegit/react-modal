@@ -16,4 +16,4 @@ ModalContent.propTypes = {
   className: PropTypes.string,
 }
 
-export default forwardRef(ModalContent)
+export default ModalContent
