@@ -13,7 +13,7 @@ import classnames from "../lib/classnames"
 // styles
 import "./modal.scss"
 
-const Modal = ({
+export const Modal = ({
   appendToBody,
   children,
   className,
@@ -154,5 +154,3 @@ Modal.propTypes = {
     PropTypes.shape({ current: PropTypes.object }),
   ]).isRequired,
 }
-
-export default Modal
