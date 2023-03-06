@@ -1,53 +1,55 @@
-// third-party
+// packages
+import { useCallback, useContext, useEffect, useRef, useState } from "react"
 import ReactDOM from "react-dom"
-import { useCallback, useEffect, useRef, useState } from "react"
 import PropTypes from "prop-types"
-import clsx from "clsx"
-
-// hooks
-import { useUserPrefs, usePreventScroll } from "@wethegit/react-hooks"
-import useLocale from "../../hooks/use-locale"
+import { usePreventScroll, useUserPrefs } from "@wethegit/react-hooks"
 
 // components
-import IconButton from "../icon-button/icon-button"
+import ModalProvider, { ModalContext } from "../context/modal-context"
+
+// utils
+import classnames from "../lib/classnames"
 
 // styles
-import * as styles from "./modal.module.scss"
+import "./modal.scss"
 
-export default function Modal({
-  appendToBody = true,
+const Modal = ({
+  appendToBody,
   children,
   className,
-  contentClassName,
+  closeDelay,
   onClose,
-  closeDelay = 0,
   onCloseStarted,
   onOpen,
   toggleFunction,
   triggerRef,
   ...props
-}) {
-  const { globals } = useLocale()
+}) => {
+  const { handleClose } = useContext(ModalContext)
   const { prefersReducedMotion } = useUserPrefs()
   const [animateIn, setAnimateIn] = useState(false)
   const [animateOut, setAnimateOut] = useState(false)
   const [exitDelay, setExitDelay] = useState(() =>
     prefersReducedMotion ? 0 : closeDelay
   )
-  const closeBtn = useRef() // we'll treat this as the "first focusable element"
-  const lastFocusableElement = useRef()
+  const animationTimeout = useRef(null)
+  const modalRef = useRef()
   const focusStartRef = useRef()
   const focusEndRef = useRef()
-  const animationTimeout = useRef(null)
+  const firstFocusableElement = useRef()
+  const lastFocusableElement = useRef()
 
-  usePreventScroll(true)
+  usePreventScroll(state)
 
   const focusStartingPosition = () => {
-    closeBtn.current.focus()
+    const element =
+      firstFocusableElement.current || fallback_firstFocusableElement.current
+    element.focus()
   }
 
   const focusEndingPosition = () => {
-    lastFocusableElement.current.focus()
+    const element = lastFocusableElement.current || fallback_lastFocusableElement.current
+    element.focus()
   }
 
   const closeComplete = useCallback(() => {
@@ -56,27 +58,29 @@ export default function Modal({
     toggleFunction(false)
   }, [onClose, triggerRef, toggleFunction])
 
-  const handleClose = useCallback(
-    (_) => {
+  // Create our handleClose function, and bind it to the ModalContext value for handleCLose.
+  // This way, we can access the function value and pass it to any custom ModalClose button,
+  // regardless of where it lives.
+  useEffect(() => {
+    handleClose.current = () => {
       if (onCloseStarted) onCloseStarted()
       setAnimateOut(true)
       setTimeout(() => {
         closeComplete()
       }, exitDelay)
-    },
-    [onCloseStarted, exitDelay, closeComplete]
-  )
+    }
+  }, [onCloseStarted, exitDelay, closeComplete])
 
   useEffect(() => {
-    // animate the modal contents on mount
+    // Animate the modal contents on mount.
     animationTimeout.current = setTimeout(() => setAnimateIn(true), 100)
 
-    // Focus the close button on mount
+    // Focus the first focusable element on mount.
     focusStartingPosition()
 
-    // hook up focus event listeners
-    focusStartRef.current.addEventListener("focus", (_) => focusEndingPosition())
-    focusEndRef.current.addEventListener("focus", (_) => focusStartingPosition())
+    // Hook up focus event listeners to create a focus loop within the modal.
+    focusStartRef.current.addEventListener("focus", () => focusEndingPosition())
+    focusEndRef.current.addEventListener("focus", () => focusStartingPosition())
 
     if (onOpen) onOpen()
 
@@ -87,8 +91,10 @@ export default function Modal({
 
   // Hook up the escape key
   useEffect(() => {
-    const onKeyUp = function (e) {
-      if (e.keyCode === 27) handleClose()
+    if (!handleClose.current) return
+
+    const onKeyUp = (e) => {
+      if (e.keyCode === 27) handleClose.current()
     }
 
     window.addEventListener("keyup", onKeyUp)
@@ -102,50 +108,36 @@ export default function Modal({
     setExitDelay(prefersReducedMotion ? 0 : closeDelay)
   }, [closeDelay, prefersReducedMotion])
 
-  const renderModal = () => {
-    return (
+  const renderModal = () => (
+    <ModalProvider>
       <div
-        className={clsx([
-          styles.modal,
-          animateIn && styles.modalActive,
-          animateOut && styles.modalHeadingOut,
+        className={classnames([
+          "modal",
+          animateIn && "modal--entering",
+          animateOut && "modal--exiting",
           className,
         ])}
+        ref={modalRef}
         style={{ "--out-duration": `${exitDelay}ms` }}
         {...props}
       >
-        <div className={styles.backdrop} onClick={handleClose}></div>
-        <span className="visually-hidden" ref={focusStartRef} tabIndex="0"></span>
-        <IconButton
-          id="close"
-          ref={closeBtn}
-          onClick={handleClose}
-          hiddenText={globals.close}
-          className={clsx([styles.close, "focus-reverse"])}
-          color="white"
-        />
-
-        <div className={clsx([styles.content, contentClassName])}>
-          {children}
-          {/* 
-            Having an empty focusable element to maintain the "loop" isn't my favorite idea,
-            so a potential to-do here could be: allow the developer to pass in a ref to set
-            as their last focusable element.
-          */}
-          <span
-            className={styles.hideFocusRing}
-            ref={lastFocusableElement}
-            tabIndex="0"
-          ></span>
-        </div>
-
-        <span className="visually-hidden" ref={focusEndRef} tabIndex="0"></span>
+        <div className="modal__backdrop" onClick={handleClose.current} />
+        <span className="modal-util-visually-hidden" ref={focusStartRef} tabIndex="0" />
+        <span className="modal__focus-bounds" ref={firstFocusableElement} tabIndex="0" />
+        {children}
+        <span className="modal__focus-bounds" ref={lastFocusableElement} tabIndex="0" />
+        <span className="modal-util-visually-hidden" ref={focusEndRef} tabIndex="0" />
       </div>
-    )
-  }
+    </ModalProvider>
+  )
 
   if (appendToBody) return ReactDOM.createPortal(renderModal(), document.body)
   else return renderModal()
+}
+
+Modal.defaultProps = {
+  appendToBody: true,
+  closeDelay: 200,
 }
 
 Modal.propTypes = {
@@ -153,7 +145,6 @@ Modal.propTypes = {
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.arrayOf(PropTypes.node)]),
   className: PropTypes.string,
   closeDelay: PropTypes.number,
-  contentClassName: PropTypes.string,
   onClose: PropTypes.func,
   onCloseStarted: PropTypes.func,
   onOpen: PropTypes.func,
@@ -161,5 +152,7 @@ Modal.propTypes = {
   triggerRef: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.object }),
-  ]),
+  ]).isRequired,
 }
+
+export default Modal
