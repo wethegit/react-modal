@@ -8,7 +8,7 @@ import { createContext, useRef } from "react"
 const ModalContext = createContext()
 
 const ModalProvider = ({ children }) => {
-  const { handleClose } = useRef()
+  const handleClose = useRef()
 
   const value = {
     handleClose,
