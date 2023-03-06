@@ -1,10 +1,15 @@
 const path = require("path")
 const webpack = require("webpack")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 module.exports = {
   entry: path.resolve(__dirname, "./src/index.js"),
   module: {
     rules: [
+      {
+        test: /\.s?css$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+      },
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
@@ -15,7 +20,7 @@ module.exports = {
               "@babel/preset-env",
               ["@babel/preset-react", { runtime: "automatic" }],
             ],
-            plugins: ["@babel/plugin-transform-modules-commonjs"]
+            plugins: ["@babel/plugin-transform-modules-commonjs"],
           },
         },
       },
@@ -39,11 +44,12 @@ module.exports = {
       root: "React",
       module: "react",
     },
-    "React": "React",
+    React: "React",
   },
   plugins: [
+    new MiniCssExtractPlugin(),
     new webpack.ProvidePlugin({
-      "React": "react",
+      React: "react",
     }),
   ],
   output: {

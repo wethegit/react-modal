@@ -1,4 +1,2 @@
-import Modal from "./components/modal"
-import useModal from "./hooks/use-modal"
-
-export { Modal, useModal }
+export { Modal } from "./components/modal"
+export { useModal } from "./hooks/use-modal"
