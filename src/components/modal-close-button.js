@@ -19,7 +19,7 @@ export const ModalCloseButton = forwardRef(
 
     return (
       <button
-        class={classnames(["modal__close-button", className])}
+        className={classnames(["modal__close-button", className])}
         onClick={handleClick}
         ref={parsedRef}
         {...props}

@@ -11,10 +11,14 @@ export const useModal = () => {
     if (!window) return
 
     if (modalSlug) {
-      const currentPath = window.location.pathname
-
-      if (open) window.history.pushState({}, "", `${currentPath}`)
-      else window.history.pushState({}, "", `${currentPath}#!/${modalSlug}`)
+      if (open) {
+        // Replace the state, AND explicitly remove the hash,
+        // otherwise window.onhashchange won't fire
+        window.location.hash = ""
+        window.history.replaceState({}, "", window.location.pathname)
+      } else {
+        window.location.hash = `#!/${modalSlug}`
+      }
     } else {
       setOpen((open) => !open)
     }
@@ -29,6 +33,7 @@ export const useModal = () => {
       else setOpen(false)
     }
 
+    // Check for a slug on mount
     handleHashChange()
 
     window.addEventListener("hashchange", handleHashChange)
