@@ -110,6 +110,7 @@ export const ModalInner = ({
         "modal",
         animateIn && "modal--entering",
         animateOut && "modal--exiting",
+        prefersReducedMotion && "modal--reduced-motion",
         className,
       ])}
       ref={modalRef}

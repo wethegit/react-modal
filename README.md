@@ -97,16 +97,17 @@ const YourComponent = () => {
 
 ### `<Modal>`
 
-| prop           | type      | default value | description                                                                                                                                                                                                |
-| -------------- | --------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| appendToBody   | Boolean   | true          | Optional. Whether to append the Modal markup to the HTML `<body>` element, or to leave it where it exists within your component structure. Setting this to `false` can be useful for "local" dialog boxes. |
-| className      | String    | null          |                                                                                                                                                                                                            |
-| closeDelay     | Number    | 200           | The amount of time (milliseconds) before unmounting the modal after a close action. This allows time to animate the modal out, using the `.modal--exiting` CSS class.                                      |
-| onClose        | Function  | null          | Optional. Callback to run when the modal unmounts.                                                                                                                                                         |
-| onCloseStarted | Function  | null          | Optional. Callback to run immeditaely after a close action, but before the modal unmounts.                                                                                                                 |
-| onOpen         | Function  | null          | Optional. Callback to run on open of the modal.                                                                                                                                                            |
-| toggleFunction | Function  | null          | The modal's state setter function, as returned by `useModal`.                                                                                                                                              |
-| triggerRef     | React Ref | null          | A React Ref bound to the button or link that triggered the opening of the modal.                                                                                                                           |
+| prop                 | type      | default value | description                                                                                                                                                                                                                                                                                            |
+| -------------------- | --------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| appendToBody         | Boolean   | true          | Optional. Whether to append the Modal markup to the HTML `<body>` element, or to leave it where it exists within your component structure. Setting this to `false` can be useful for "local" dialog boxes.                                                                                             |
+| className            | String    | null          |                                                                                                                                                                                                                                                                                                        |
+| closeDelay           | Number    | 200           | The amount of time (milliseconds) before unmounting the modal after a close action. This allows time to animate the modal out, using the `.modal--exiting` CSS class.                                                                                                                                  |
+| onClose              | Function  | null          | Optional. Callback to run when the modal unmounts.                                                                                                                                                                                                                                                     |
+| onCloseStarted       | Function  | null          | Optional. Callback to run immeditaely after a close action, but before the modal unmounts.                                                                                                                                                                                                             |
+| onOpen               | Function  | null          | Optional. Callback to run on open of the modal.                                                                                                                                                                                                                                                        |
+| prefersReducedMotion | Boolean   | false         | Optional. Whether to use zero-millisecond animation delays and durations. This only applies to the intervals at which classNames are added and removed — styles are unaffected, and can be overwritten with your own CSS. To assist with this, the `.modal--reduced-motion` className will be applied. |
+| toggleFunction       | Function  | null          | The modal's state setter function, as returned by `useModal`.                                                                                                                                                                                                                                          |
+| triggerRef           | React Ref | null          | A React Ref bound to the button or link that triggered the opening of the modal.                                                                                                                                                                                                                       |
 
 ### `<ModalContent>`
 
@@ -127,7 +128,7 @@ The stylesheet that ships with this component uses the [BEM methodology](https:/
 
 ## Accessibility
 
-This modal component was built with focus management at top-of-mind, and provides enough flexibility to allow you to create an accessible modal window.
+This component was built with focus accessibility best-practices at top-of-mind, and provides enough flexibility to allow you to create an accessible modal window.
 
 ### Focus loop
 
@@ -136,3 +137,51 @@ There are hidden elements at the start and end of the modal component, which, on
 ### Focus on close
 
 The required `triggerRef` prop ensures that—on close of a modal—your user's focus is shifted back to where it was before opening the modal.
+
+### Reduced motion
+
+The `<Modal>` component can receive a boolean `prefersReducedMotion` prop, which can be used to override things like animation durations and delays. If passed with the value `true`, the open and close animations will happen instantly. The modal itself will also receive a CSS class name of `.modal--reduced-motion`, which you can use to adjust various CSS custom properties. We don't automatically add reduced motion styling, in the hope keeping the component unopinionated and to allow you to implement your CSS animation effects as you see fit. Here's an example of a reduced motion implementation:
+
+```jsx
+/* your jsx */
+<Modal
+  prefersReducedMotion={true}
+  triggerRef={triggerRef}
+  toggleFunction={toggleModal}
+>
+```
+
+```css
+/* your stylesheet */
+.modal--reduced-motion {
+  --duration: 0s;
+  --content-delay: 0s;
+}
+```
+
+To hook into whether the user prefers reduced motion, you can either use the browser's `matchMedia` API, or you can use the `<UserPreferencesProvider>` and `useUserPrefs` hooks from [@wethegit/react-hooks](https://www.npmjs.com/package/@wethegit/react-hooks).
+
+- Using `matchMedia`:
+
+```js
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches // => true or false
+```
+
+- Using `@wethegit/react-hooks`:
+
+```jsx
+// app.js, or wherever your React context providers live
+import { UserPreferencesProvider } from "@wethegit/react-hooks"
+
+const YourApp = ({ children }) => {
+  return <UserPreferencesProvider>{children}</UserPreferencesProvider>
+}
+```
+
+```jsx
+import { useUserPrefs } from "@wethegit/react-hooks"
+
+const YourComponent = () => {
+  const { prefersReducedMotion } = useUserPrefs()
+}
+```
