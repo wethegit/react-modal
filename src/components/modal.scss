@@ -72,6 +72,8 @@
 }
 
 .modal__close-button {
+  position: relative;
+
   .modal--exiting & {
     pointer-events: none;
   }

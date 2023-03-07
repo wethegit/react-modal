@@ -5,9 +5,9 @@
 
 import { createContext, useRef } from "react"
 
-const ModalContext = createContext()
+export const ModalContext = createContext()
 
-const ModalProvider = ({ children }) => {
+export const ModalProvider = ({ children }) => {
   const handleClose = useRef()
 
   const value = {
@@ -16,5 +16,3 @@ const ModalProvider = ({ children }) => {
 
   return <ModalContext.Provider value={value}>{children}</ModalContext.Provider>
 }
-
-export { ModalProvider as default, ModalContext }

@@ -10,9 +10,7 @@ export const ModalCloseButton = forwardRef(
   ({ onClick, children, className, ...props }, inputRef) => {
     const { handleClose } = useContext(ModalContext)
     const localRef = useRef()
-    const parsedRef = inputRef.current ? inputRef : localRef
-
-    if (!handleClose.current) return
+    const parsedRef = inputRef || localRef
 
     const handleClick = () => {
       if (onClick) onClick()
