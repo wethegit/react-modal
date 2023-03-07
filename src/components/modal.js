@@ -9,9 +9,6 @@ import { ModalProvider } from "../context/modal-context"
 // utils
 import { modalPropTypes, modalDefaultProps } from "./modal-prop-types"
 
-// styles
-import "./modal.scss"
-
 export const Modal = ({ appendToBody, children, ...props }) => {
   const renderModal = () => (
     <UserPreferencesProvider>
