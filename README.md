@@ -143,12 +143,18 @@ The required `triggerRef` prop ensures that—on close of a modal—your user's 
 The `<Modal>` component can receive a boolean `prefersReducedMotion` prop, which can be used to override things like animation durations and delays. If passed with the value `true`, the open and close animations will happen instantly. The modal itself will also receive a CSS class name of `.modal--reduced-motion`, which you can use to adjust various CSS custom properties. We don't automatically add reduced motion styling, in the hope keeping the component unopinionated and to allow you to implement your CSS animation effects as you see fit. Here's an example of a reduced motion implementation:
 
 ```jsx
-/* your jsx */
-<Modal
-  prefersReducedMotion={true}
-  triggerRef={triggerRef}
-  toggleFunction={toggleModal}
->
+const YourComponent = () => {
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+
+  return (
+    // ...omitted for brevity
+    <Modal
+      prefersReducedMotion={prefersReducedMotion}
+      triggerRef={triggerRef}
+      toggleFunction={toggleModal}
+    >
+  )
+}
 ```
 
 ```css
@@ -156,32 +162,5 @@ The `<Modal>` component can receive a boolean `prefersReducedMotion` prop, which
 .modal--reduced-motion {
   --duration: 0s;
   --content-delay: 0s;
-}
-```
-
-To hook into whether the user prefers reduced motion, you can either use the browser's `matchMedia` API, or you can use the `<UserPreferencesProvider>` and `useUserPrefs` hooks from [@wethegit/react-hooks](https://www.npmjs.com/package/@wethegit/react-hooks).
-
-- Using `matchMedia`:
-
-```js
-const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches // => true or false
-```
-
-- Using `@wethegit/react-hooks`:
-
-```jsx
-// app.js, or wherever your React context providers live
-import { UserPreferencesProvider } from "@wethegit/react-hooks"
-
-const YourApp = ({ children }) => {
-  return <UserPreferencesProvider>{children}</UserPreferencesProvider>
-}
-```
-
-```jsx
-import { useUserPrefs } from "@wethegit/react-hooks"
-
-const YourComponent = () => {
-  const { prefersReducedMotion } = useUserPrefs()
 }
 ```
