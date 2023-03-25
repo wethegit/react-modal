@@ -1,6 +1,6 @@
 // packages
 import { useCallback, useContext, useEffect, useRef, useState } from "react"
-import { usePreventScroll, useUserPrefs } from "@wethegit/react-hooks"
+import { usePreventScroll } from "@wethegit/react-hooks"
 
 // contexts
 import { ModalContext } from "../context/modal-context"
@@ -17,12 +17,12 @@ export const ModalInner = ({
   onClose,
   onCloseStarted,
   onOpen,
+  prefersReducedMotion,
   toggleFunction,
   triggerRef,
   ...props
 }) => {
   const { handleClose } = useContext(ModalContext)
-  const { prefersReducedMotion } = useUserPrefs()
   const [animateIn, setAnimateIn] = useState(false)
   const [animateOut, setAnimateOut] = useState(false)
   const [exitDelay, setExitDelay] = useState(() =>
@@ -110,6 +110,7 @@ export const ModalInner = ({
         "modal",
         animateIn && "modal--entering",
         animateOut && "modal--exiting",
+        prefersReducedMotion && "modal--reduced-motion",
         className,
       ])}
       ref={modalRef}
