@@ -1,9 +1,3 @@
-.modal { 
-   --ease-back-in: cubic-bezier(0.6, -0.28, 0.735, 0.045);
-   --ease-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);
-  }
-
-
 .modal-util-visually-hidden {
   border: 0;
   clip: rect(0 0 0 0);
@@ -22,6 +16,9 @@
 }
 
 .modal {
+  --ease-back-in: cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  --ease-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+
   --alpha: 0;
   --scale: 0;
   --duration: 0.3s;
