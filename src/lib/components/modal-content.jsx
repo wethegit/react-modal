@@ -1,7 +1,7 @@
 import PropTypes from "prop-types"
 
 // utils
-import { classnames } from "../lib/classnames"
+import { classnames } from "../utils/classnames"
 
 export const ModalContent = ({ children, className, ...props }) => {
   return (
