@@ -18,19 +18,15 @@
 .modal {
   --ease-back-in: cubic-bezier(0.6, -0.28, 0.735, 0.045);
   --ease-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);
-
   --alpha: 0;
   --scale: 0;
   --duration: 0.3s;
   --content-delay: 0.2s;
   --overlay-color: rgb(0 0 0 / 90%);
 
-  bottom: 0;
   color: #fff;
-  left: 0;
+  inset: 0;
   position: fixed;
-  right: 0;
-  top: 0;
   width: 100%;
   z-index: 100;
 }
@@ -51,12 +47,9 @@
 
 .modal__backdrop {
   background-color: var(--overlay-color);
-  bottom: 0;
-  left: 0;
+  inset: 0;
   opacity: var(--alpha);
   position: absolute;
-  right: 0;
-  top: 0;
   transition: opacity var(--duration) linear;
 }
 

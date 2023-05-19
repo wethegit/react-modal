@@ -7,10 +7,9 @@ import { ModalContext } from "../context/modal-context"
 
 // utils
 import { modalPropTypes, modalDefaultProps } from "./modal-prop-types"
-import { classnames } from "../lib/classnames"
+import { classnames } from "../utils/classnames"
 
 export const ModalInner = ({
-  appendToBody,
   children,
   className,
   closeDelay,
@@ -38,14 +37,13 @@ export const ModalInner = ({
   usePreventScroll(true)
 
   const focusStartingPosition = () => {
-    const element =
-      firstFocusableElement.current || fallback_firstFocusableElement.current
-    element.focus()
+    const element = firstFocusableElement.current
+    if (element) element.focus()
   }
 
   const focusEndingPosition = () => {
-    const element = lastFocusableElement.current || fallback_lastFocusableElement.current
-    element.focus()
+    const element = lastFocusableElement.current
+    if (element) element.focus()
   }
 
   const closeComplete = useCallback(() => {
@@ -65,7 +63,7 @@ export const ModalInner = ({
         closeComplete()
       }, exitDelay)
     }
-  }, [onCloseStarted, exitDelay, closeComplete])
+  }, [onCloseStarted, exitDelay, closeComplete, handleClose])
 
   useEffect(() => {
     // Animate the modal contents on mount.
@@ -83,7 +81,7 @@ export const ModalInner = ({
     return () => {
       clearTimeout(animationTimeout.current)
     }
-  }, [])
+  }, [onOpen])
 
   // Hook up the escape key
   useEffect(() => {
