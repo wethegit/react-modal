@@ -72,22 +72,22 @@
     "postcss-scss": "^4.0.6",
     "prettier": "^2.8.8",
     "sass": "^1.62.1",
-    "vite": "^4.3.2",
     "stylelint": "^15.6.2",
     "stylelint-config-recommended": "^12.0.0",
     "stylelint-config-standard": "^33.0.0",
     "stylelint-config-standard-scss": "^9.0.0",
     "stylelint-order": "^6.0.3",
-    "stylelint-selector-bem-pattern": "^2.1.1"
+    "stylelint-selector-bem-pattern": "^2.1.1",
+    "vite": "^4.3.2"
   },
   "peerDependencies": {
     "react": "17.0.2",
     "react-dom": "^17.0.2"
   },
   "dependencies": {
-    "@wethegit/react-hooks": "~0.0.8",
+    "@wethegit/react-hooks": "^1.0.0-beta.0",
     "prop-types": "~15.8.1",
-    "react": "^17.0.2",
+    "react": "17.0.2",
     "react-dom": "^17.0.2"
   }
 }
