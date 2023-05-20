@@ -15,9 +15,9 @@ jobs:
         with:
           node-version: "16.x"
           registry-url: "https://registry.npmjs.org"
+          scope: "@wethegit"
       - run: |
           npm config set //registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN
-          npm config set scope @wethegit:registry https://registry.npmjs.org
           npm config list
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
