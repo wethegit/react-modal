@@ -20,7 +20,7 @@ npm install @wethegit/react-modal
 Import this wherever it makes sense to, based on your project structure:
 
 ```bash
-import "@wethegit/react-modal/dist/main.css"
+import "@wethegit/react-modal/style.css"
 ```
 
 ## Usage
