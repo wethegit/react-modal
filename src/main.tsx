@@ -17,7 +17,7 @@ function CustomModal() {
 
   // this could be set in the stylesheet as well but for sake of example we'll do it here
   const stylesVars = {
-    "--transition-duration": `${TRANSITION}ms`,
+    "--duration": `${TRANSITION}ms`,
   } as React.CSSProperties
 
   return (
@@ -32,7 +32,9 @@ function CustomModal() {
           state={state}
           className={classnames([
             styles.CustomModal,
-            state === ModalStates.OPENING && styles.CustomModalOpening,
+            // you can also add separate classes for each state to customize the animation even further
+            (state === ModalStates.OPENING || state === ModalStates.OPEN) &&
+              styles.CustomModalOpen,
             state === ModalStates.CLOSING && styles.CustomModalClosing,
           ])}
           style={stylesVars}
@@ -59,12 +61,12 @@ function ModalWithSlug() {
 
   return (
     <>
-      {/* `triggerRef` allows the focus to shift to whatever triggered the modal, on close. */}
       <button ref={triggerButton} onClick={toggle}>
         Using a slug
       </button>
 
       {isOpen && (
+        // no custom animation, the library comes with a suttle fade in/out
         <Modal state={state}>
           <ModalBackdrop onClick={toggle} className={styles.CustomModalOverlay} />
           <ModalContent className={styles.CustomModalContent}>

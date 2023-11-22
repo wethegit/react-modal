@@ -1,6 +1,11 @@
 .CustomModal {
-  --ease-back-in: cubic-bezier(0.99, -0.58, 0.13, 1);
-  --ease-in: cubic-bezier(0.77, 0, 0.1, 1.39);
+  --ease: cubic-bezier(0.77, 0, 0.1, 1.39);
+  --scale: 0;
+}
+
+.CustomModalOpen {
+  --ease: cubic-bezier(0.77, 0, 0.1, 1.39);
+  --scale: 1;
 }
 
 .CustomModalOverlay {
@@ -14,6 +19,8 @@
   box-shadow: 0 0 5px 0 rgb(0 0 0 / 20%);
   padding: 2rem;
   font-family: sans-serif;
+  transition: transform var(--duration) var(--ease, cubic-bezier(0.77, 0, 0.1, 1.39));
+  transform: scale(var(--scale));
 }
 
 .CustomModalClose {
@@ -22,5 +29,6 @@
   color: white;
   font-size: 1rem;
   border: none;
+  cursor: pointer;
   padding: 0.5em 1em;
 }

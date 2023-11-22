@@ -8,8 +8,6 @@ export interface ModalVisuallyHiddenProps extends React.HTMLAttributes<HTMLDivEl
 
 export const ModalVisuallyHidden = forwardRef<HTMLDivElement, ModalVisuallyHiddenProps>(
   function ModalVisuallyHidden(props: ModalVisuallyHiddenProps, ref) {
-    return (
-      <div className={styles.modalVisuallyHidden} ref={ref} tabIndex={0} {...props} />
-    )
+    return <div className={styles.modalVisuallyHidden} ref={ref} {...props} />
   }
 )
