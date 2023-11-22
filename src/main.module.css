@@ -13,21 +13,21 @@
 }
 
 .CustomModalContent {
-  --ease: cubic-bezier(0.77, 0, 0.1, 1.39);
-  --scale: 0;
-
   max-width: 50vw;
   background-color: white;
   border-radius: 1rem;
   box-shadow: 0 0 5px 0 rgb(0 0 0 / 20%);
   padding: 2rem;
   font-family: sans-serif;
-  transition: transform var(--transition-duration)
-    var(--ease, cubic-bezier(0.77, 0, 0.1, 1.39));
-  transform: scale(var(--scale));
 }
 
-.CustomModalContentOpen {
+.CustomModalTransition {
+  transition: transform var(--transition-duration)
+    var(--ease, cubic-bezier(0.77, 0, 0.1, 1.39));
+  transform: scale(var(--scale, 0));
+}
+
+.CustomModalTransitionOpen {
   --ease: cubic-bezier(0.77, 0, 0.1, 1.39);
   --scale: 1;
 }

@@ -38,8 +38,9 @@ function CustomModal() {
               // you can also add separate classes for each state to customize the animation even further
               // you can also simply customize the parent <Modal> component
               // etc...
+              styles.CustomModalTransition,
               (state === ModalStates.OPENING || state === ModalStates.OPEN) &&
-                styles.CustomModalContentOpen,
+                styles.CustomModalTransitionOpen,
             ])}
           >
             <button onClick={toggle} className={styles.CustomModalClose}>
@@ -67,9 +68,9 @@ function ModalWithSlug() {
       </button>
 
       {isOpen && (
-        // no custom animation, the library comes with a suttle fade in/out
         <Modal state={state}>
-          <ModalBackdrop onClick={toggle} className={styles.CustomModalOverlay} />
+          <ModalBackdrop onClick={toggle} />
+          {/* no transition, the library comes with a suttle fade in/out by default */}
           <ModalContent className={styles.CustomModalContent}>
             <button onClick={toggle} className={styles.CustomModalClose}>
               Close
