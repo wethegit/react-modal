@@ -8,3 +8,5 @@
 index.html
 vite.config.js
 src
+tsconfig.json
+tsconfig.build.json

@@ -1,0 +1,26 @@
+.CustomModal {
+  --ease-back-in: cubic-bezier(0.99, -0.58, 0.13, 1);
+  --ease-in: cubic-bezier(0.77, 0, 0.1, 1.39);
+}
+
+.CustomModalOverlay {
+  --backdrop-color: rgb(125 125 125 / 80%);
+}
+
+.CustomModalContent {
+  max-width: 50vw;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 0 5px 0 rgb(0 0 0 / 20%);
+  padding: 2rem;
+  font-family: sans-serif;
+}
+
+.CustomModalClose {
+  border-radius: 0.25rem;
+  background-color: black;
+  color: white;
+  font-size: 1rem;
+  border: none;
+  padding: 0.5em 1em;
+}

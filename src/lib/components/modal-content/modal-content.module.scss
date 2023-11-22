@@ -1,0 +1,12 @@
+.modalContent {
+  left: 50%;
+  max-height: 100vh;
+  opacity: var(--alpha);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(var(--scale));
+  transition: transform var(--duration) ease, opacity var(--duration) ease;
+  width: 100%;
+}

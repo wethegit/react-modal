@@ -1,0 +1,31 @@
+.modalInner {
+  --ease-back-in: cubic-bezier(0.6, -0.28, 0.735, 0.045);
+  --ease-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  --alpha: 0;
+  --scale: 0;
+  --duration: var(--transition-duration, 0.3);
+  --backdrop-color: rgb(0 0 0 / 90%);
+
+  inset: 0;
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.modalOpen {
+  pointer-events: auto;
+}
+
+.modalOpen,
+.modalOpening {
+  --alpha: 1;
+  --scale: 1;
+}
+
+.modalClosing {
+  --alpha: 0;
+  --scale: 0.8;
+  --modal-ease: var(--ease-in);
+  --modal-button-ease: var(--ease-back-in);
+}

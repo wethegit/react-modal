@@ -1,0 +1,7 @@
+.modalBackdrop {
+  background-color: var(--backdrop-color);
+  inset: 0;
+  opacity: var(--alpha);
+  position: absolute;
+  transition: opacity var(--duration) linear;
+}

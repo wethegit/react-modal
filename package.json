@@ -1,28 +1,29 @@
 {
   "name": "@wethegit/react-modal",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "A customizable, accessible modal window component for React projects.",
   "files": [
     "dist"
   ],
-  "style": "dist/style.css",
-  "css": "dist/style.css",
+  "sideEffects": [
+    "**/*.css"
+  ],
   "type": "module",
-  "main": "./dist/react-modal.umd.cjs",
-  "module": "./dist/react-modal.js",
+  "style": "./dist/style.css",
+  "css": "./dist/style.css",
+  "main": "./dist/react-modal.js",
+  "types": "./dist/main.d.ts",
   "exports": {
-    ".": {
-      "import": "./dist/react-modal.js",
-      "require": "./dist/react-modal.umd.cjs"
-    },
+    ".": "./dist/main.js",
     "./style.css": "./dist/style.css"
   },
   "scripts": {
     "prepare": "node -e \"try { require('husky').install() } catch (e) {if (e.code !== 'MODULE_NOT_FOUND') throw e}\"",
     "dev": "vite",
-    "build": "npm run lint:scripts && npm run lint:styles && vite build",
-    "lint:scripts": "eslint --fix --ext .jsx,js --ignore-path .gitignore .",
-    "lint:styles": "stylelint src/**/*.{css,scss}"
+    "build": "rm -rf dist && npm run lint:scripts && npm run lint:styles && vite build",
+    "lint:scripts": "eslint --fix --report-unused-disable-directives --max-warnings 0 --ext .tsx,ts --ignore-path .gitignore .",
+    "lint:styles": "stylelint src/**/*.{css,scss} --fix",
+    "format": "prettier . --write"
   },
   "publishConfig": {
     "access": "public"
@@ -33,7 +34,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx}": "eslint --fix",
+    "*.{ts,tsx}": "eslint --fix",
     "*.{css,scss}": "stylelint --fix",
     "*": "prettier -w -u"
   },
@@ -57,12 +58,16 @@
   "author": "Andrew Rubin <andrew@wethecollective.com> (https://wethecollective.com)",
   "license": "MIT",
   "devDependencies": {
-    "@types/react": "^18.0.28",
-    "@types/react-dom": "^18.0.11",
+    "@types/node": "~20.9.4",
+    "@types/react": "~18.2.38",
+    "@types/react-dom": "~18.2.16",
+    "@typescript-eslint/eslint-plugin": "~5.62.0",
+    "@typescript-eslint/parser": "~5.62.0",
     "@vitejs/plugin-react-swc": "^3.0.0",
-    "eslint": "^8.38.0",
+    "eslint": "~8.54.0",
     "eslint-config-preact": "^1.3.0",
     "eslint-config-prettier": "~8.3.0",
+    "eslint-config-react-app": "~7.0.1",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",
@@ -70,7 +75,9 @@
     "lint-staged": "^13.2.2",
     "postcss": "^8.4.23",
     "postcss-scss": "^4.0.6",
-    "prettier": "^2.8.8",
+    "prettier": "~2.8.8",
+    "react": "17.0.2",
+    "react-dom": "^17.0.2",
     "sass": "^1.62.1",
     "stylelint": "^15.6.2",
     "stylelint-config-recommended": "^12.0.0",
@@ -78,16 +85,15 @@
     "stylelint-config-standard-scss": "^9.0.0",
     "stylelint-order": "^6.0.3",
     "stylelint-selector-bem-pattern": "^2.1.1",
-    "vite": "^4.3.2"
+    "typescript": "~5.3.2",
+    "vite": "^4.3.2",
+    "vite-plugin-dts": "~3.6.3"
   },
   "peerDependencies": {
     "react": "17.0.2",
     "react-dom": "^17.0.2"
   },
   "dependencies": {
-    "@wethegit/react-hooks": "^1.0.0",
-    "prop-types": "~15.8.1",
-    "react": "17.0.2",
-    "react-dom": "^17.0.2"
+    "@wethegit/react-hooks": "^1.0.0"
   }
 }
