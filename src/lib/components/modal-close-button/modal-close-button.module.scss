@@ -1,7 +1,0 @@
-.modalCloseButton {
-  position: relative;
-
-  .modal--exiting & {
-    pointer-events: none;
-  }
-}

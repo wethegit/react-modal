@@ -1,13 +1,10 @@
-import React from "react"
-import ReactDOM from "react-dom"
-
 import { useRef } from "react"
 import { Modal, ModalContent, useModal, ModalBackdrop, ModalStates } from "./lib"
 import { classnames } from "./utils/classnames"
 
 import styles from "./custom-modal.module.css"
 
-function CustomModal() {
+export function CustomModal() {
   const TRANSITION = 800
   const triggerButton = useRef(null)
   const { isOpen, state, toggle } = useModal({
@@ -49,48 +46,3 @@ function CustomModal() {
     </>
   )
 }
-
-function ModalWithSlug() {
-  const triggerButton = useRef(null)
-  const { isOpen, state, toggle } = useModal({
-    triggerRef: triggerButton,
-    slug: "modal-with-slug",
-  })
-
-  return (
-    <>
-      {/* `triggerRef` allows the focus to shift to whatever triggered the modal, on close. */}
-      <button ref={triggerButton} onClick={toggle}>
-        Using a slug
-      </button>
-
-      {isOpen && (
-        <Modal state={state}>
-          <ModalBackdrop onClick={toggle} className={styles.CustomModalOverlay} />
-          <ModalContent className={styles.CustomModalContent}>
-            <button onClick={toggle} className={styles.CustomModalClose}>
-              Close
-            </button>
-            <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
-          </ModalContent>
-        </Modal>
-      )}
-    </>
-  )
-}
-
-function App() {
-  return (
-    <>
-      <CustomModal />
-      <ModalWithSlug />
-    </>
-  )
-}
-
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById("root")
-)

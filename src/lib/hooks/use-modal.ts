@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 export enum ModalStates {
   // Helper state to indicate that the modal can mount and show its content
@@ -23,31 +23,35 @@ export interface UseModalOptions {
    * Defines the animation effects of the modal.
    */
   prefersReducedMotion?: boolean
+  /**
+   * If set, the modal will be opened/closed by updating the route hash.
+   */
+  slug?: string
 }
 
 export function useModal({
   triggerRef,
   transitionDuration = 300,
   prefersReducedMotion,
+  slug,
 }: UseModalOptions) {
   const [state, setState] = useState<ModalStates>(ModalStates.CLOSED)
-  const [modalSlug, setModalSlug] = useState<string | null>(() => null)
-  const [exitDelay, setExitDelay] = useState(() =>
+  const [delay, setDelay] = useState(() =>
     prefersReducedMotion ? 0 : transitionDuration
   )
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setState(ModalStates.CLOSING)
 
     if (triggerRef && triggerRef.current) triggerRef.current.focus()
 
     timer.current = setTimeout(() => {
       setState(ModalStates.CLOSED)
-    }, exitDelay)
-  }
+    }, delay)
+  }, [delay, triggerRef])
 
-  const handleOpen = () => {
+  const handleOpen = useCallback(() => {
     setState(ModalStates.MOUNTED)
 
     // next tick
@@ -56,38 +60,38 @@ export function useModal({
 
       timer.current = setTimeout(() => {
         setState(ModalStates.OPEN)
-      }, exitDelay)
+      }, delay)
     }, 10)
-  }
+  }, [delay])
 
   // Toggle function for the modal state.
-  // If a `modalSlug` has been set, we'll only update the route/hash here —
+  // If a `slug` has been set, we'll only update the route/hash here —
   // state management will be handled on route change instead.
-  const toggle = () => {
+  const toggle = useCallback(() => {
     if (!window) return
 
-    if (modalSlug) {
+    if (slug) {
       if (state === ModalStates.OPEN) {
         // Replace the state, AND explicitly remove the hash,
         // otherwise window.onhashchange won't fire
         window.location.hash = ""
         window.history.replaceState({}, "", window.location.pathname)
       } else {
-        window.location.hash = `#!/${modalSlug}`
+        window.location.hash = `#!/${slug}`
       }
     } else {
       if (state === ModalStates.OPEN) handleClose()
       else handleOpen()
     }
-  }
+  }, [handleClose, handleOpen, slug, state])
 
   // Manage the route changes if a slug was set
   useEffect(() => {
-    if (!modalSlug) return
+    if (!slug) return
 
     const handleHashChange = () => {
-      if (window.location.hash === `#!/${modalSlug}`) open()
-      else close()
+      if (window.location.hash === `#!/${slug}`) handleOpen()
+      else handleClose()
     }
 
     // Check for a slug on mount
@@ -98,24 +102,30 @@ export function useModal({
     return () => {
       window.removeEventListener("hashchange", handleHashChange)
     }
-  }, [modalSlug])
+  }, [handleClose, handleOpen, slug])
 
   useEffect(() => {
-    setExitDelay(prefersReducedMotion ? 0 : transitionDuration)
+    setDelay(prefersReducedMotion ? 0 : transitionDuration)
   }, [transitionDuration, prefersReducedMotion])
 
+  // Hook up the escape key
   useEffect(() => {
+    const onKeyUp = (e: KeyboardEvent) => {
+      if (e.code === "Escape") handleClose()
+    }
+
+    window.addEventListener("keyup", onKeyUp)
+
     return () => {
+      window.removeEventListener("keyup", onKeyUp)
       clearTimeout(timer.current)
     }
-  }, [])
+  }, [handleClose])
 
   return {
     // alias for simple state management
     isOpen: state !== ModalStates.CLOSED,
     state,
     toggle,
-    setModalSlug,
-    transitionDuration,
   }
 }

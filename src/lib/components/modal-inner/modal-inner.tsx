@@ -9,7 +9,7 @@ import { ModalFocusBounds } from "../modal-focus-bounds"
 
 import styles from "./modal-inner.module.scss"
 
-export interface ModalInnerProps {
+export interface ModalInnerProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * The content of the modal.
    */
@@ -19,27 +19,12 @@ export interface ModalInnerProps {
    */
   className?: string
   /**
-   * Toggle the modal state.
-   */
-  toggle: () => void
-  /**
    * The current state of the modal.
    */
   state: ModalStates
-  /**
-   * The delay in milliseconds to wait before exiting the modal.
-   */
-  transitionDuration?: number
 }
 
-export function ModalInner({
-  state,
-  transitionDuration,
-  children,
-  className,
-  toggle,
-  ...props
-}: ModalInnerProps) {
+export function ModalInner({ state, children, className, ...props }: ModalInnerProps) {
   const modalRef = useRef<HTMLDivElement>(null)
   const firstFocusableElement = useRef<HTMLDivElement>(null)
   const lastFocusableElement = useRef<HTMLDivElement>(null)
@@ -63,23 +48,6 @@ export function ModalInner({
     focusStartingPosition()
   }, [])
 
-  // Hook up the escape key
-  useEffect(() => {
-    const onKeyUp = (e: KeyboardEvent) => {
-      if (e.code === "Escape") toggle()
-    }
-
-    window.addEventListener("keyup", onKeyUp)
-
-    return () => {
-      window.removeEventListener("keyup", onKeyUp)
-    }
-  }, [toggle])
-
-  const stylesVars = {
-    "--transition-duration": `${transitionDuration}ms`,
-  } as React.CSSProperties
-
   return (
     <div
       className={classnames([
@@ -90,7 +58,6 @@ export function ModalInner({
         className,
       ])}
       ref={modalRef}
-      style={stylesVars}
       role="dialog"
       aria-modal="true"
       aria-hidden={state !== ModalStates.OPEN}

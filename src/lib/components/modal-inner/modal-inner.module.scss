@@ -3,7 +3,7 @@
   --ease-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);
   --alpha: 0;
   --scale: 0;
-  --duration: var(--transition-duration, 0.3);
+  --duration: var(--transition-duration, 300ms);
   --backdrop-color: rgb(0 0 0 / 90%);
 
   inset: 0;
