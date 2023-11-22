@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity var(--duration, 300ms) ease;
+  transition: opacity var(--transition-duration, 300ms) ease;
 }
 
 .modalOpen {

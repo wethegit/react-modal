@@ -1,26 +1,5 @@
-.CustomModal {
-  --ease: cubic-bezier(0.77, 0, 0.1, 1.39);
-  --scale: 0;
-}
-
-.CustomModalOpen {
-  --ease: cubic-bezier(0.77, 0, 0.1, 1.39);
-  --scale: 1;
-}
-
 .CustomModalOverlay {
   background-color: rgb(125 125 125 / 80%);
-}
-
-.CustomModalContent {
-  max-width: 50vw;
-  background-color: white;
-  border-radius: 1rem;
-  box-shadow: 0 0 5px 0 rgb(0 0 0 / 20%);
-  padding: 2rem;
-  font-family: sans-serif;
-  transition: transform var(--duration) var(--ease, cubic-bezier(0.77, 0, 0.1, 1.39));
-  transform: scale(var(--scale));
 }
 
 .CustomModalClose {
@@ -31,4 +10,24 @@
   border: none;
   cursor: pointer;
   padding: 0.5em 1em;
+}
+
+.CustomModalContent {
+  --ease: cubic-bezier(0.77, 0, 0.1, 1.39);
+  --scale: 0;
+
+  max-width: 50vw;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 0 5px 0 rgb(0 0 0 / 20%);
+  padding: 2rem;
+  font-family: sans-serif;
+  transition: transform var(--transition-duration)
+    var(--ease, cubic-bezier(0.77, 0, 0.1, 1.39));
+  transform: scale(var(--scale));
+}
+
+.CustomModalContentOpen {
+  --ease: cubic-bezier(0.77, 0, 0.1, 1.39);
+  --scale: 1;
 }
