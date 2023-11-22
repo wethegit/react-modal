@@ -5,7 +5,7 @@ import { useRef } from "react"
 import { Modal, ModalContent, useModal, ModalBackdrop, ModalStates } from "./lib"
 import { classnames } from "./utils/classnames"
 
-import styles from "./custom-modal.module.css"
+import styles from "./main.module.css"
 
 function CustomModal() {
   const TRANSITION = 800
