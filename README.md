@@ -236,7 +236,7 @@ If you do customize the transition, you'll need to account for this yourself.
 ```jsx
 function MyModal() {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  const TRANSITION = prefersReducedMotion ? 800 : 0
+  const TRANSITION = prefersReducedMotion ? 0 : 800
   const { state } = useModal({
     transitionDuration: TRANSITION
   })
