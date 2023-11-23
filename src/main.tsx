@@ -54,17 +54,17 @@ function CustomModal() {
   )
 }
 
-function ModalWithSlug() {
+function ModalWithHash() {
   const triggerButton = useRef(null)
   const { isOpen, state, toggle } = useModal({
     triggerRef: triggerButton,
-    slug: "modal-with-slug",
+    hash: "modal-with-hash",
   })
 
   return (
     <>
       <button ref={triggerButton} onClick={toggle}>
-        Using a slug
+        Using a hash
       </button>
 
       {isOpen && (
@@ -87,7 +87,7 @@ function App() {
   return (
     <>
       <CustomModal />
-      <ModalWithSlug />
+      <ModalWithHash />
     </>
   )
 }

@@ -22,13 +22,13 @@ export interface UseModalOptions {
   /**
    * If set, the modal will be opened/closed by updating the route hash.
    */
-  slug?: string
+  hash?: string
 }
 
 export function useModal({
   triggerRef,
   transitionDuration = 300,
-  slug,
+  hash,
 }: UseModalOptions) {
   const [state, setState] = useState<ModalStates>(ModalStates.CLOSED)
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
@@ -46,7 +46,7 @@ export function useModal({
       return ModalStates.CLOSING
     })
 
-    // If the modal is already open, don't do anything
+    // If the modal is already closed, don't do anything
     // we don't want unnecessary re-renders
     if (current === ModalStates.CLOSED) return
 
@@ -88,37 +88,37 @@ export function useModal({
   }, [transitionDuration])
 
   // Toggle function for the modal state.
-  // If a `slug` has been set, we'll only update the route/hash here —
+  // If a `hash` has been set, we'll only update the route/hash here —
   // state management will be handled on route change instead.
   const toggle = useCallback(() => {
     if (!window) return
 
-    if (slug) {
+    if (hash) {
       if (state === ModalStates.OPEN) {
         // Replace the state, AND explicitly remove the hash,
         // otherwise window.onhashchange won't fire
         window.location.hash = ""
         window.history.replaceState({}, "", window.location.pathname)
       } else {
-        window.location.hash = `#${slug}`
+        window.location.hash = `#${hash}`
       }
     } else {
       // check all states in case user tried to close the modal in a transition
       if (state === ModalStates.CLOSING || state === ModalStates.CLOSED) handleOpen()
       else handleClose()
     }
-  }, [handleClose, handleOpen, slug, state])
+  }, [handleClose, handleOpen, hash, state])
 
-  // Manage the route changes if a slug was set
+  // Manage the route changes if a hash was set
   useEffect(() => {
-    if (!slug) return
+    if (!hash) return
 
     const handleHashChange = () => {
-      if (window.location.hash === `#${slug}`) handleOpen()
+      if (window.location.hash === `#${hash}`) handleOpen()
       else handleClose()
     }
 
-    // Check for a slug on mount
+    // Check for a hash on mount
     handleHashChange()
 
     window.addEventListener("hashchange", handleHashChange)
@@ -126,7 +126,7 @@ export function useModal({
     return () => {
       window.removeEventListener("hashchange", handleHashChange)
     }
-  }, [handleClose, handleOpen, slug])
+  }, [handleClose, handleOpen, hash])
 
   // Hook up the escape key
   useEffect(() => {

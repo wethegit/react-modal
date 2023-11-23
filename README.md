@@ -68,7 +68,7 @@ function MyModal() {
 
 ## Using a URL hash to manage the modal state
 
-It's as easy as passing a `slug` prop to the `useModal` hook. The hook will then use the URL hash to manage the modal's state. This is useful for when you want to allow your users to share a link to a modal window, or when you want to allow your users to navigate to a modal window via a URL.
+It's as easy as passing a `hash` prop to the `useModal` hook. The hook will then use the URL hash to manage the modal's state. This is useful for when you want to allow your users to share a link to a modal window, or when you want to allow your users to navigate to a modal window via a URL.
 
 ```jsx
 import {
@@ -80,7 +80,7 @@ import {
 
 function MyModal() {
   const { isOpen, state, toggle } = useModal({
-    slug: "my-modal-hash"
+    hash: "my-modal-hash"
   })
 
   return (
@@ -118,8 +118,8 @@ function MyModal() {
     triggerRef: triggerButton,
     // `transitionDuration` is used to set the duration of the modal's open/close animation
     transitionDuration: TRANSITION,
-    // `slug` will automatically open the modal when hash changes and will also update the hash when the modal opens/closes
-    slug: "modal-with-slug",
+    // `hash` will automatically open the modal when hash changes and will also update the hash when the modal opens/closes
+    hash: "modal-with-hash",
   })
 
   // Custom transition must be set on the <Modal> component, how you do it, inline styles or as a className, is up to you
@@ -203,7 +203,7 @@ Any valid `<div>` props can be passed to this component.
 
 | prop                 | type      | default value | description                                                                                                                                                                                                                                                                                            |
 | -------------------- | --------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| slug                 | String    | null          | Optional. If provided, the hook will use the URL hash to manage the modal's state. This is useful for when you want to allow your users to share a link to a modal window, or when you want to allow your users to navigate to a modal window via a URL.                                                                                             |
+| hash                 | String    | null          | Optional. If provided, the hook will use the URL hash to manage the modal's state. This is useful for when you want to allow your users to share a link to a modal window, or when you want to allow your users to navigate to a modal window via a URL.                                                                                             |
 | triggerRef           | RefObject | null          | Optional. If provided, the hook will shift the user's focus to this element when the modal closes.                                                                                                                                                                                                     |
 | transitionDuration   | Number    | 300           | Optional. The duration of the modal's open/close animation.                                                                                                                                                                                                                                            |
 
