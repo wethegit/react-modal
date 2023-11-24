@@ -2,24 +2,16 @@ import React from "react"
 import ReactDOM from "react-dom"
 
 import { useRef } from "react"
-import { Modal, ModalContent, useModal, ModalBackdrop, ModalStates } from "./lib"
+import { Modal, ModalContent, useModal, ModalBackdrop } from "./lib"
 import { classnames } from "./utils/classnames"
 
 import styles from "./main.module.css"
 
 function CustomModal() {
-  const TRANSITION = 800
   const triggerButton = useRef(null)
-  const { isOpen, state, toggle } = useModal({
+  const { isOpen, toggle } = useModal({
     triggerRef: triggerButton,
-    transitionDuration: TRANSITION,
   })
-
-  // It's mandatory to be passed to the <Modal> component though either as inline styles or as a className
-  // for sake of example we'll do it here
-  const stylesVars = {
-    "--transition-duration": `${TRANSITION}ms`,
-  } as React.CSSProperties
 
   return (
     <>
@@ -29,20 +21,9 @@ function CustomModal() {
       </button>
 
       {isOpen && (
-        <Modal state={state} style={stylesVars}>
+        <Modal>
           <ModalBackdrop onClick={toggle} className={styles.CustomModalOverlay} />
-          <ModalContent
-            className={classnames([
-              styles.CustomModalContent,
-              // up to you how you want to handle the animation
-              // you can also add separate classes for each state to customize the animation even further
-              // you can also simply customize the parent <Modal> component
-              // etc...
-              styles.CustomModalTransition,
-              (state === ModalStates.OPENING || state === ModalStates.OPEN) &&
-                styles.CustomModalTransitionOpen,
-            ])}
-          >
+          <ModalContent className={classnames([styles.CustomModalContent])}>
             <button onClick={toggle} className={styles.CustomModalClose}>
               Close
             </button>
@@ -56,7 +37,7 @@ function CustomModal() {
 
 function ModalWithHash() {
   const triggerButton = useRef(null)
-  const { isOpen, state, toggle } = useModal({
+  const { isOpen, toggle } = useModal({
     triggerRef: triggerButton,
     hash: "modal-with-hash",
   })
@@ -68,9 +49,8 @@ function ModalWithHash() {
       </button>
 
       {isOpen && (
-        <Modal state={state}>
-          <ModalBackdrop onClick={toggle} />
-          {/* no transition, the library comes with a suttle fade in/out by default */}
+        <Modal>
+          <ModalBackdrop onClick={toggle} className={styles.CustomModalOverlay} />
           <ModalContent className={styles.CustomModalContent}>
             <button onClick={toggle} className={styles.CustomModalClose}>
               Close
@@ -88,6 +68,7 @@ function App() {
     <>
       <CustomModal />
       <ModalWithHash />
+      <a href="#modal-with-hash">Open modal from anchor without events</a>
     </>
   )
 }

@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react"
 import { usePreventScroll } from "@wethegit/react-hooks"
 
 import { classnames } from "../../../utils/classnames"
-import { ModalStates } from "../../hooks"
 
 import { ModalVisuallyHidden } from "../modal-visually-hidden"
 import { ModalFocusBounds } from "../modal-focus-bounds"
@@ -18,13 +17,9 @@ export interface ModalInnerProps extends React.HTMLAttributes<HTMLDivElement> {
    * The className of the modal.
    */
   className?: string
-  /**
-   * The current state of the modal.
-   */
-  state: ModalStates
 }
 
-export function ModalInner({ state, children, className, ...props }: ModalInnerProps) {
+export function ModalInner({ children, className, ...props }: ModalInnerProps) {
   const modalRef = useRef<HTMLDivElement>(null)
   const firstFocusableElement = useRef<HTMLDivElement>(null)
   const lastFocusableElement = useRef<HTMLDivElement>(null)
@@ -42,53 +37,27 @@ export function ModalInner({ state, children, className, ...props }: ModalInnerP
   }
 
   useEffect(() => {
-    if (state === ModalStates.MOUNTED) focusStartingPosition()
-  }, [state])
-
-  // this component takes care of its own focus management
-  // anything rendered inside of it is up to the consumer
-  const isHidden = state === ModalStates.CLOSED
-  const tabIndex = isHidden ? -1 : 0
+    focusStartingPosition()
+  }, [])
 
   return (
     <div
-      className={classnames([
-        styles.modalInner,
-        (state === ModalStates.OPENING || state === ModalStates.OPEN) && styles.modalOpen,
-        className,
-      ])}
+      className={classnames([styles.modalInner, className])}
       ref={modalRef}
       role="dialog"
       aria-modal="true"
-      aria-hidden={isHidden}
-      tabIndex={tabIndex}
+      tabIndex={0}
       {...props}
     >
-      <ModalVisuallyHidden
-        aria-hidden={isHidden}
-        tabIndex={tabIndex}
-        onFocus={focusEndingPosition}
-      />
+      <ModalVisuallyHidden onFocus={focusEndingPosition} />
 
-      <ModalFocusBounds
-        aria-hidden={isHidden}
-        tabIndex={tabIndex}
-        ref={firstFocusableElement}
-      />
+      <ModalFocusBounds ref={firstFocusableElement} />
 
       {children}
 
-      <ModalFocusBounds
-        aria-hidden={isHidden}
-        tabIndex={tabIndex}
-        ref={lastFocusableElement}
-      />
+      <ModalFocusBounds ref={lastFocusableElement} />
 
-      <ModalVisuallyHidden
-        aria-hidden={isHidden}
-        tabIndex={tabIndex}
-        onFocus={focusStartingPosition}
-      />
+      <ModalVisuallyHidden onFocus={focusStartingPosition} />
     </div>
   )
 }
