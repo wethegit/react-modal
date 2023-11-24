@@ -131,7 +131,7 @@ export function useModal({
   // Hook up the escape key
   useEffect(() => {
     const onKeyUp = (e: KeyboardEvent) => {
-      if (e.code === "Escape") handleClose()
+      if (e.code === "Escape") toggle()
     }
 
     window.addEventListener("keyup", onKeyUp)
@@ -140,7 +140,7 @@ export function useModal({
       window.removeEventListener("keyup", onKeyUp)
       clearTimeout(timer.current)
     }
-  }, [handleClose])
+  }, [toggle])
 
   return {
     isOpen: state !== ModalStates.CLOSED,

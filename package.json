@@ -21,8 +21,11 @@
     "prepare": "node -e \"try { require('husky').install() } catch (e) {if (e.code !== 'MODULE_NOT_FOUND') throw e}\"",
     "dev": "vite",
     "build": "rm -rf dist && npm run lint:scripts && npm run lint:styles && vite build",
-    "lint:scripts": "eslint --fix --report-unused-disable-directives --max-warnings 0 --ext .tsx,ts --ignore-path .gitignore .",
-    "lint:styles": "stylelint src/**/*.{css,scss} --fix",
+    "version": "changeset version",
+    "release": "changeset release",
+    "lint:scripts": "eslint --report-unused-disable-directives --max-warnings 0 --ext .tsx,ts --ignore-path .gitignore .",
+    "lint:styles": "stylelint src/**/*.{css,scss}",
+    "lint": "npm run lint:scripts && npm run lint:styles",
     "format": "prettier . --write"
   },
   "publishConfig": {
@@ -58,6 +61,7 @@
   "author": "Andrew Rubin <andrew@wethecollective.com> (https://wethecollective.com)",
   "license": "MIT",
   "devDependencies": {
+    "@changesets/changelog-github": "~0.4.8",
     "@types/node": "~20.9.4",
     "@types/react": "~18.2.38",
     "@types/react-dom": "~18.2.16",
@@ -94,6 +98,7 @@
     "react-dom": "^17.0.2"
   },
   "dependencies": {
+    "@changesets/cli": "~2.26.2",
     "@wethegit/react-hooks": "^1.0.0"
   }
 }
