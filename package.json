@@ -22,7 +22,7 @@
     "start": "vite",
     "build": "rm -rf dist && vite build",
     "version": "changeset version",
-    "release": "npm run build && changeset release",
+    "release": "npm run build && changeset publish",
     "lint:scripts": "eslint --report-unused-disable-directives --max-warnings 0 --ext .tsx,ts --ignore-path .gitignore .",
     "lint:styles": "stylelint src/**/*.{css,scss}",
     "lint": "npm run lint:scripts && npm run lint:styles",
