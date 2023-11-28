@@ -1,12 +1,13 @@
 .github
 .husky
 .vscode
+src
+types
 .eslintrc
+.nvmrc
 .prettierignore
 .prettierrc
 .stylelintrc
 index.html
-vite.config.js
-src
 tsconfig.json
-tsconfig.build.json
+vite.config.js

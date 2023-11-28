@@ -4,8 +4,6 @@
 
 # V2
 
-This is a major release because it changes the API of the Modal component.
-
 ## Breaking changes
 
 Seriously, everything.

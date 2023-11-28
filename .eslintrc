@@ -14,7 +14,8 @@
   "rules": {
     "react-refresh/only-export-components": 0,
     "react/react-in-jsx-scope": 0,
-    "react/prop-types": [2, { "ignore": ["className"] }]
+    "react/prop-types": [2, { "ignore": ["className"] }],
+    "@typescript-eslint/no-non-null-assertion": 0
   },
   "ignorePatterns": [
     "node_modules/",

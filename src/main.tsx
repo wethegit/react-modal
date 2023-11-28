@@ -1,7 +1,6 @@
-import React from "react"
-import ReactDOM from "react-dom"
+import React, { useRef } from "react"
+import { createRoot } from "react-dom/client"
 
-import { useRef } from "react"
 import { Modal, ModalContent, useModal, ModalBackdrop } from "./lib"
 import { classnames } from "./utils/classnames"
 
@@ -73,9 +72,8 @@ function App() {
   )
 }
 
-ReactDOM.render(
+createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 )
