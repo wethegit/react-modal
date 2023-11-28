@@ -1,5 +1,0 @@
-export { Modal } from "./components/modal"
-export { ModalCloseButton } from "./components/modal-close-button"
-export { ModalContent } from "./components/modal-content"
-export { ModalContext } from "./context/modal-context"
-export { useModal } from "./hooks/use-modal"

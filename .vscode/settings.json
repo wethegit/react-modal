@@ -9,7 +9,6 @@
   },
   "eslint.format.enable": true,
   "eslint.nodePath": "",
-  "eslint.packageManager": "npm",
   "files.associations": {
     "*.js": "javascriptreact",
     "*.jsx": "javascriptreact",
