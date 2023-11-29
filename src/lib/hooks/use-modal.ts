@@ -16,7 +16,8 @@ export interface UseModalOptions {
   hash?: string
 }
 
-export function useModal({ triggerRef, hash }: UseModalOptions) {
+export function useModal(props: UseModalOptions) {
+  const { triggerRef, hash } = props || {}
   const [state, setState] = useState<ModalStates>(ModalStates.CLOSED)
 
   const handleClose = useCallback(() => {
