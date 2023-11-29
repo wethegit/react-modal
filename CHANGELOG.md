@@ -1,5 +1,11 @@
 # @wethegit/react-modal
 
+## 2.0.1
+
+### Patch Changes
+
+- [#10](https://github.com/wethegit/react-modal/pull/10) [`1e4fba5`](https://github.com/wethegit/react-modal/commit/1e4fba52e05da8dc2f046a4e58ce99633bfb8070) Thanks [@marlonmarcello](https://github.com/marlonmarcello)! - fix: ensures empty params doesn't throw
+
 ## 2.0.0
 
 ### Major Changes
