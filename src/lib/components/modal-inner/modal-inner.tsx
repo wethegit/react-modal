@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react"
-import { usePreventScroll } from "@wethegit/react-hooks"
 
 import { classnames } from "../../../utils/classnames"
 
@@ -23,8 +22,6 @@ export function ModalInner({ children, className, ...props }: ModalInnerProps) {
   const modalRef = useRef<HTMLDivElement>(null)
   const firstFocusableElement = useRef<HTMLDivElement>(null)
   const lastFocusableElement = useRef<HTMLDivElement>(null)
-
-  usePreventScroll(true)
 
   const focusStartingPosition = () => {
     const element = firstFocusableElement.current

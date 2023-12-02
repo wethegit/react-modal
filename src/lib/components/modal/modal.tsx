@@ -1,4 +1,5 @@
 import ReactDOM from "react-dom"
+import { usePreventScroll } from "@wethegit/react-hooks"
 
 import { ModalInner } from "../modal-inner"
 import type { ModalInnerProps } from "../modal-inner"
@@ -15,6 +16,8 @@ export interface ModalProps extends ModalInnerProps {
 }
 
 export function Modal({ appendToBody, className, ...props }: ModalProps) {
+  usePreventScroll(appendToBody)
+
   if (appendToBody) return ReactDOM.createPortal(<ModalInner {...props} />, document.body)
   else
     return (
