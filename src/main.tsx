@@ -20,7 +20,7 @@ function CustomModal() {
       </button>
 
       {isOpen && (
-        <Modal>
+        <Modal appendToBody>
           <ModalBackdrop onClick={toggle} className={styles.CustomModalOverlay} />
           <ModalContent className={classnames([styles.CustomModalContent])}>
             <button onClick={toggle} className={styles.CustomModalClose}>
