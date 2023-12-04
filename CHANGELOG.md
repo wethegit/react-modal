@@ -1,5 +1,11 @@
 # @wethegit/react-modal
 
+## 2.0.2
+
+### Patch Changes
+
+- [#12](https://github.com/wethegit/react-modal/pull/12) [`f603cd2`](https://github.com/wethegit/react-modal/commit/f603cd290c5932b8ae67a8c12b2b69fab8653754) Thanks [@marlonmarcello](https://github.com/marlonmarcello)! - Fixes and issue where the modal would lock the body even though `appendToBody` wasn't set to `true`
+
 ## 2.0.1
 
 ### Patch Changes
