@@ -1,5 +1,11 @@
 # @wethegit/react-modal
 
+## 2.2.0
+
+### Minor Changes
+
+- [#14](https://github.com/wethegit/react-modal/pull/14) [`22e9f45`](https://github.com/wethegit/react-modal/commit/22e9f45aa77042fc7acaf006f0d4efbdf99c03c7) Thanks [@andrewrubin](https://github.com/andrewrubin)! - Fix: positiong class names not being passed down if appendToBody is true
+
 ## 2.0.2
 
 ### Patch Changes
