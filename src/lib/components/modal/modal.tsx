@@ -18,15 +18,17 @@ export interface ModalProps extends ModalInnerProps {
 export function Modal({ appendToBody, className, ...props }: ModalProps) {
   usePreventScroll(appendToBody)
 
-  if (appendToBody) return ReactDOM.createPortal(<ModalInner {...props} />, document.body)
-  else
-    return (
-      <ModalInner
-        className={classnames([
-          appendToBody ? styles.ModalFixed : styles.ModalAbsolute,
-          className,
-        ])}
-        {...props}
-      />
+  const classes = classnames([
+    appendToBody ? styles.ModalFixed : styles.ModalAbsolute,
+    className,
+  ])
+
+  if (appendToBody) {
+    return ReactDOM.createPortal(
+      <ModalInner className={classes} {...props} />,
+      document.body
     )
+  } else {
+    return <ModalInner className={classes} {...props} />
+  }
 }
