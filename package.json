@@ -1,6 +1,6 @@
 {
   "name": "@wethegit/react-modal",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "A customizable, accessible modal window component for React projects.",
   "files": [
     "dist"
