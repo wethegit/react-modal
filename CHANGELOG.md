@@ -1,5 +1,11 @@
 # @wethegit/react-modal
 
+## 2.2.1
+
+### Patch Changes
+
+- [#16](https://github.com/wethegit/react-modal/pull/16) [`4a7ac9b`](https://github.com/wethegit/react-modal/commit/4a7ac9b009db57e3ff31658ac9f5702f5543d1a9) Thanks [@marlonmarcello](https://github.com/marlonmarcello)! - hotfix: exported types
+
 ## 2.2.0
 
 ### Minor Changes
