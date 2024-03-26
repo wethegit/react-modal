@@ -14,7 +14,12 @@
   "main": "./dist/react-modal.js",
   "types": "./dist/main.d.ts",
   "exports": {
-    ".": "./dist/react-modal.js",
+    ".": {
+      "import": {
+        "types": "./dist/main.d.ts",
+        "default": "./dist/react-modal.js"
+      }
+    },
     "./style.css": "./dist/style.css"
   },
   "scripts": {
