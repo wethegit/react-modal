@@ -18,7 +18,8 @@
       "import": {
         "types": "./dist/main.d.ts",
         "default": "./dist/react-modal.js"
-      }
+      },
+      "require": "./dist/react-modal.js"
     },
     "./style.css": "./dist/style.css"
   },
