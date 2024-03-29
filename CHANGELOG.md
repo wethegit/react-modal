@@ -1,5 +1,11 @@
 # @wethegit/react-modal
 
+## 2.2.2
+
+### Patch Changes
+
+- [#18](https://github.com/wethegit/react-modal/pull/18) [`888f892`](https://github.com/wethegit/react-modal/commit/888f892e697a2b37b0d871c0c0280f7bf1a0cf6a) Thanks [@marlonmarcello](https://github.com/marlonmarcello)! - fix: commonjs support
+
 ## 2.2.1
 
 ### Patch Changes
