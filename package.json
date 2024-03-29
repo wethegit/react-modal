@@ -19,7 +19,7 @@
         "types": "./dist/main.d.ts",
         "default": "./dist/react-modal.js"
       },
-      "require": "./dist/react-modal.js"
+      "require": "./dist/react-modal.cjs"
     },
     "./style.css": "./dist/style.css"
   },
