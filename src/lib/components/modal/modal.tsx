@@ -6,16 +6,28 @@ import type { ModalInnerProps } from "../modal-inner"
 import { classnames } from "../../../utils/classnames"
 
 import styles from "./modal.module.scss"
-
 export interface ModalProps extends ModalInnerProps {
   /**
-   * If true, the modal will be appended to the body instead of being rendered in place.
-   * @defaultValue true
-   */
-  appendToBody?: boolean
+   * If provided, the modal will be appended to the provided element instead of being rendered in place.
+   * @defaultValue defaults to document.body
+   **/
+  renderTo?: string | HTMLElement
 }
 
-export function Modal({ appendToBody, className, ...props }: ModalProps) {
+const getModalRoot = (renderTo?: string | HTMLElement) => {
+  if (typeof renderTo === "string") {
+    if (renderTo === "parent") return
+
+    return document.querySelector(renderTo) || document.body
+  }
+
+  return renderTo || document.body
+}
+
+export function Modal({ renderTo, className, ...props }: ModalProps) {
+  const modalRoot = getModalRoot(renderTo)
+  const appendToBody = modalRoot === document.body
+
   usePreventScroll(appendToBody)
 
   const classes = classnames([
@@ -23,12 +35,11 @@ export function Modal({ appendToBody, className, ...props }: ModalProps) {
     className,
   ])
 
-  if (appendToBody) {
-    return ReactDOM.createPortal(
-      <ModalInner className={classes} {...props} />,
-      document.body
-    )
-  } else {
-    return <ModalInner className={classes} {...props} />
+  const modalContent = <ModalInner className={classes} {...props} />
+
+  if (modalRoot) {
+    return ReactDOM.createPortal(modalContent, modalRoot)
   }
+
+  return modalContent
 }
