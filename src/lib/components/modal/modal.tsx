@@ -8,7 +8,7 @@ import { classnames } from "../../../utils/classnames"
 import styles from "./modal.module.scss"
 export interface ModalProps extends ModalInnerProps {
   /**
-   * If provided, the modal will be appended to the provided element instead of being rendered in place.
+   * If provided, the modal will be appended to the provided element instead of being rendered in body
    * @defaultValue defaults to document.body
    **/
   renderTo?: string | HTMLElement
@@ -16,8 +16,6 @@ export interface ModalProps extends ModalInnerProps {
 
 const getModalRoot = (renderTo?: string | HTMLElement) => {
   if (typeof renderTo === "string") {
-    if (renderTo === "parent") return
-
     return document.querySelector(renderTo) || document.body
   }
 
