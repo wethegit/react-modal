@@ -62,34 +62,6 @@ function ModalWithSelector() {
   )
 }
 
-function ModalRenderInPlace() {
-  const triggerButton = useRef(null)
-  const { isOpen, toggle } = useModal({
-    triggerRef: triggerButton,
-  })
-
-  return (
-    <>
-      {/* `triggerRef` allows the focus to shift to whatever triggered the modal, on close. */}
-      <button ref={triggerButton} onClick={toggle}>
-        Open modal (in place - &quot;parent&quot;)
-      </button>
-
-      {isOpen && (
-        <Modal renderTo={"parent"}>
-          <ModalBackdrop onClick={toggle} className={styles.CustomModalOverlay} />
-          <ModalContent className={classnames([styles.CustomModalContent])}>
-            <button onClick={toggle} className={styles.CustomModalClose}>
-              Close
-            </button>
-            <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
-          </ModalContent>
-        </Modal>
-      )}
-    </>
-  )
-}
-
 function ModalWithHash() {
   const triggerButton = useRef(null)
   const modalRootRef = useRef(null)
@@ -126,7 +98,6 @@ function App() {
       <CustomModal />
       <ModalWithSelector />
       <ModalWithHash />
-      <ModalRenderInPlace />
       <div className="modal-selector"></div>
       <a href="#modal-with-hash">Open modal from anchor without events</a>
     </>
