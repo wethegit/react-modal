@@ -6,6 +6,7 @@ import type { ModalInnerProps } from "../modal-inner"
 import { classnames } from "../../../utils/classnames"
 
 import styles from "./modal.module.scss"
+import { useMemo } from "react"
 export interface ModalProps extends ModalInnerProps {
   /**
    * If provided, the modal will be appended to the provided element instead of being rendered in body
@@ -14,26 +15,29 @@ export interface ModalProps extends ModalInnerProps {
   renderTo?: string | HTMLElement
 }
 
-const getModalRoot = (renderTo?: string | HTMLElement) => {
-  if (typeof window !== "undefined") {
+export function Modal({ renderTo, className, ...props }: ModalProps) {
+  const isClient = typeof window !== "undefined" && typeof document !== "undefined"
+  // get modalRoot
+  const modalRoot = useMemo(() => {
+    if (!isClient) return null
+
     if (typeof renderTo === "string") {
-      return document.querySelector(renderTo) || document.body
+      const element = document.querySelector(renderTo)
+      if (element) return element
+      // Console error when element not found
+      console.error(`Element not found for selector: ${renderTo}`)
+      return null
     }
 
     return renderTo || document.body
-  }
+  }, [renderTo, isClient])
 
-  return null
-}
+  const lockScrolling = isClient ? modalRoot === document.body : false
 
-export function Modal({ renderTo, className, ...props }: ModalProps) {
-  const modalRoot = getModalRoot(renderTo)
-  const appendToBody = modalRoot ? modalRoot === document.body : false
-
-  usePreventScroll(appendToBody)
+  usePreventScroll(lockScrolling)
 
   const classes = classnames([
-    appendToBody ? styles.ModalFixed : styles.ModalAbsolute,
+    lockScrolling ? styles.ModalFixed : styles.ModalAbsolute,
     className,
   ])
 
