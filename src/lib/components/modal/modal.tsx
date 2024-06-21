@@ -15,16 +15,20 @@ export interface ModalProps extends ModalInnerProps {
 }
 
 const getModalRoot = (renderTo?: string | HTMLElement) => {
-  if (typeof renderTo === "string") {
-    return document.querySelector(renderTo) || document.body
+  if (typeof window !== "undefined") {
+    if (typeof renderTo === "string") {
+      return document.querySelector(renderTo) || document.body
+    }
+
+    return renderTo || document.body
   }
 
-  return renderTo || document.body
+  return null
 }
 
 export function Modal({ renderTo, className, ...props }: ModalProps) {
   const modalRoot = getModalRoot(renderTo)
-  const appendToBody = modalRoot === document.body
+  const appendToBody = modalRoot ? modalRoot === document.body : false
 
   usePreventScroll(appendToBody)
 
