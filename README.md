@@ -104,6 +104,7 @@ Custom transition, focus management and hash-based state management.
 Use your favorite animation library, [@wethegit/react-hooks](https://wethegit.github.io/react-hooks/use-animate-presence) provides a simple one for these cases.
 
 ```jsx
+import { useRef } from 'react'
 import { useAnimatePresence } from '@wethegit/react-hooks'
 import {
   Modal,
@@ -162,7 +163,7 @@ function MyModal() {
 
 | prop                 | type      | default value | description                                                                                                                                                                                                                                                                                            |
 | -------------------- | --------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| renderTo         | String / HTMLElement | null   | Optional. If not provided or the selector/element provided is undefined/null the modal will be appended to document.body<br> If a valid selector string is provided, the modal will be appended to the element returned by document.querySelector(renderTo).<br> 	If a valid HTMLElement is provided, the modal will be appended to that element.                                                                                       |
+| renderTo         | HTMLElement   | null | If a valid HTMLElement is provided, the modal will be appended to that element. Otherwise will be rendered in place.                                                                                       |
 | className            | String    | null          |                                                                                                                                                                                                                                                                                                        |
 | children            | ReactNode | null          |                                                                                                                                                                                                                                                                                                        |
 
