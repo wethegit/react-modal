@@ -31,3 +31,7 @@
   --ease: cubic-bezier(0.77, 0, 0.1, 1.39);
   --scale: 1;
 }
+
+.CustomModalAbsolute {
+  position: absolute;
+}

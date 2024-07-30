@@ -104,6 +104,7 @@ Custom transition, focus management and hash-based state management.
 Use your favorite animation library, [@wethegit/react-hooks](https://wethegit.github.io/react-hooks/use-animate-presence) provides a simple one for these cases.
 
 ```jsx
+import { useRef } from 'react'
 import { useAnimatePresence } from '@wethegit/react-hooks'
 import {
   Modal,
@@ -114,6 +115,7 @@ import {
 
 function MyModal() {
   const triggerButton = useRef(null)
+  const modalRootRef = useRef(null)
 
   const { isOpen, toggle } = useModal({
     // `triggerRef` allows the focus to shift to whatever triggered the modal
@@ -132,9 +134,12 @@ function MyModal() {
       <button ref={triggerButton} onClick={toggle}>
         Open the modal window!
       </button>
+      <div ref={modalRootRef}></div>
 
-      {render && (
-        <Modal style={{
+      {render && modalRootRef.current && (
+        <Modal 
+          renderTo={modalRootRef.current}
+          style={{
           transition: `opacity 800ms ease-in-out`,
           opacity: animate ? 1 : 0
         }}>
@@ -158,7 +163,7 @@ function MyModal() {
 
 | prop                 | type      | default value | description                                                                                                                                                                                                                                                                                            |
 | -------------------- | --------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| appendToBody         | Boolean   | true          | Optional. Whether to append the Modal markup to the HTML `<body>` element, or to leave it where it exists within your component structure. Setting this to `false` can be useful for "local" dialog boxes.                                                                                             |
+| renderTo         | HTMLElement   | null | If a valid HTMLElement is provided, the modal will be appended to that element. Otherwise will be rendered in place.                                                                                       |
 | className            | String    | null          |                                                                                                                                                                                                                                                                                                        |
 | children            | ReactNode | null          |                                                                                                                                                                                                                                                                                                        |
 
