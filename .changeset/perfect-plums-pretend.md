@@ -12,6 +12,10 @@
 - **Added** `renderTo` prop.
   - Introduced the `renderTo` prop, which accepts an HTMLElement where the modal will be appended. This provides greater flexibilty, allowing users to specify any element to render the modal, including the body. This change enhances the customization options for the modal rendering.
 
+## Fixes
+
+- Mark argument of hook as optional [#62](https://github.com/wethegit/react-modal/issues/62)
+
 ## Migration
 
 - **Before**
