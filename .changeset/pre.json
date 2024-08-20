@@ -1,8 +1,0 @@
-{
-  "mode": "pre",
-  "tag": "beta",
-  "initialVersions": {
-    "@wethegit/react-modal": "2.2.2"
-  },
-  "changesets": ["perfect-plums-pretend"]
-}
