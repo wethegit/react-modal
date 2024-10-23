@@ -38,11 +38,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --fix",
     "*.{css,scss}": "stylelint --fix",
