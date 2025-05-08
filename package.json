@@ -81,8 +81,8 @@
     "postcss": "^8.4.23",
     "postcss-scss": "^4.0.6",
     "prettier": "~2.8.8",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
     "sass": "^1.62.1",
     "stylelint": "^15.6.2",
     "stylelint-config-recommended": "^13.0.0",
@@ -95,8 +95,8 @@
     "vite-plugin-dts": "~3.9.1"
   },
   "peerDependencies": {
-    "react": "17 - 18",
-    "react-dom": "17 - 18"
+    "react": "17 - 19",
+    "react-dom": "17 - 19"
   },
   "dependencies": {
     "@changesets/changelog-github": "~0.5.0",
