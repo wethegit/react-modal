@@ -6,26 +6,17 @@ import type { ModalInnerProps } from "../modal-inner"
 import { classnames } from "../../../utils/classnames"
 
 import styles from "./modal.module.scss"
-export type ModalProps = ModalInnerProps &
-  (
-    | {
-        /**
-         * The modal will be appended to the passed element instead of being rendered in place
-         * @defaultValue defaults inPlace
-         **/
-        renderTo?: HTMLElement
-        appendToBody?: never
-      }
-    | {
-        /**
-         * Append modal to document.body
-         **/
-        appendToBody?: boolean
-        renderTo?: never
-      }
-  )
+export interface ModalProps extends ModalInnerProps {
+  /**
+   * The modal will be appended to the passed element instead of being rendered in place
+   * @defaultValue defaults inPlace
+   **/
+  renderTo?: HTMLElement | "body"
+}
 
-export function Modal({ renderTo, appendToBody, className, ...props }: ModalProps) {
+export function Modal({ renderTo, className, ...props }: ModalProps) {
+  const appendToBody = renderTo === "body"
+
   const classes = classnames([
     styles.ModalFixed,
     className,
@@ -34,13 +25,11 @@ export function Modal({ renderTo, appendToBody, className, ...props }: ModalProp
 
   const modalContent = <ModalInner className={classes} {...props} />
 
-  if (renderTo) {
+  if (renderTo && renderTo instanceof HTMLElement) {
     return ReactDOM.createPortal(modalContent, renderTo)
   } else if (appendToBody) {
-    // get the document body and append the modal there
     const document = globalThis.document
-
-    return ReactDOM.createPortal(modalContent, document.body)
+    return ReactDOM.createPortal(modalContent, document)
   }
 
   return modalContent
