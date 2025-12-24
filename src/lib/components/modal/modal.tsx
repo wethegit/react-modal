@@ -6,14 +6,24 @@ import type { ModalInnerProps } from "../modal-inner"
 import { classnames } from "../../../utils/classnames"
 
 import styles from "./modal.module.scss"
-export interface ModalProps extends ModalInnerProps {
-  /**
-   * The modal will be appended to the passed element instead of being rendered in place
-   * @defaultValue defaults inPlace
-   **/
-  renderTo?: HTMLElement
-  appendToBody?: boolean
-}
+export type ModalProps = ModalInnerProps &
+  (
+    | {
+        /**
+         * The modal will be appended to the passed element instead of being rendered in place
+         * @defaultValue defaults inPlace
+         **/
+        renderTo?: HTMLElement
+        appendToBody?: never
+      }
+    | {
+        /**
+         * Append modal to document.body
+         **/
+        appendToBody?: boolean
+        renderTo?: never
+      }
+  )
 
 export function Modal({ renderTo, appendToBody, className, ...props }: ModalProps) {
   const classes = classnames([
