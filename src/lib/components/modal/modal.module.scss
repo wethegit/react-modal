@@ -2,6 +2,10 @@
   position: fixed;
 }
 
+.ModalAppend {
+  z-index: 9999;
+}
+
 .ModalAbsolute {
   position: absolute;
 }
