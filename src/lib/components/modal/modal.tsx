@@ -12,17 +12,21 @@ export interface ModalProps extends ModalInnerProps {
    * @defaultValue defaults inPlace
    **/
   renderTo?: HTMLElement
-  append?: boolean
+  appendToBody?: boolean
 }
 
-export function Modal({ renderTo, append, className, ...props }: ModalProps) {
-  const classes = classnames([styles.ModalFixed, className, append && styles.ModalAppend])
+export function Modal({ renderTo, appendToBody, className, ...props }: ModalProps) {
+  const classes = classnames([
+    styles.ModalFixed,
+    className,
+    appendToBody && styles.ModalAppend,
+  ])
 
   const modalContent = <ModalInner className={classes} {...props} />
 
   if (renderTo) {
     return ReactDOM.createPortal(modalContent, renderTo)
-  } else if (append) {
+  } else if (appendToBody) {
     // get the document body and append the modal there
     const document = globalThis.document
 
