@@ -6,13 +6,8 @@
       "customSyntax": "postcss-scss"
     }
   ],
-  "plugins": ["stylelint-selector-bem-pattern"],
   "rules": {
     "no-descending-specificity": null,
-    "selector-class-pattern": null,
-    "plugin/selector-bem-pattern": {
-      "preset": "bem",
-      "componentName": "[A-Z]+"
-    }
+    "selector-class-pattern": null
   }
 }

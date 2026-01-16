@@ -1,37 +1,19 @@
-.CustomModalOverlay {
-  background-color: rgb(125 125 125 / 80%);
+/* Basic styles for playground */
+
+dialog {
+	border: none;
+	padding: 0;
+	background: transparent;
 }
 
-.CustomModalClose {
-  border-radius: 0.25rem;
-  background-color: black;
-  color: white;
-  font-size: 1rem;
-  border: none;
-  cursor: pointer;
-  padding: 0.5em 1em;
+dialog::backdrop {
+	background: rgb(0 0 0 / 50%);
 }
 
-.CustomModalContent {
-  max-width: 50vw;
-  background-color: white;
-  border-radius: 1rem;
-  box-shadow: 0 0 5px 0 rgb(0 0 0 / 20%);
-  padding: 2rem;
-  font-family: sans-serif;
-}
-
-.CustomModalTransition {
-  transition: transform var(--transition-duration)
-    var(--ease, cubic-bezier(0.77, 0, 0.1, 1.39));
-  transform: scale(var(--scale, 0));
-}
-
-.CustomModalTransitionOpen {
-  --ease: cubic-bezier(0.77, 0, 0.1, 1.39);
-  --scale: 1;
-}
-
-.CustomModalAbsolute {
-  position: absolute;
+.modalContent {
+	background: white;
+	padding: 20px;
+	border-radius: 8px;
+	max-width: 500px;
+	margin: 0 auto;
 }

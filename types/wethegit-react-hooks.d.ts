@@ -1,1 +1,1 @@
-declare module "@wethegit/react-hooks"
+declare module "@wethegit/react-hooks";
