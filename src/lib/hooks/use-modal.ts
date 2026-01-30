@@ -24,17 +24,17 @@ export function useModal(props: UseModalOptions = {}) {
     let current: ModalStates | undefined
 
     setState((cur) => {
-      if (cur !== ModalStates.CLOSED) return ModalStates.CLOSED
-
       // get the current state from the hook to avoid
       // an extra dependecy and stay within the render loop
       current = cur
+
+      if (cur !== ModalStates.CLOSED) return ModalStates.CLOSED      
       return cur
     })
 
     // If the modal is already closed, don't do anything
     // we don't want focus back on the trigger
-    if (current === ModalStates.CLOSED) return
+    if (current === ModalStates.CLOSED || !current) return
 
     if (hash && window && window.location.hash === `#${hash}`) {
       window.location.hash = ""
@@ -102,7 +102,7 @@ export function useModal(props: UseModalOptions = {}) {
   }, [handleClose])
 
   return {
-    isOpen: state !== ModalStates.CLOSED,
+    isOpen: state === ModalStates.OPEN,
     toggle,
   }
 }
