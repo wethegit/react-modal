@@ -1,5 +1,15 @@
 # @wethegit/react-modal
 
+## 3.2.0
+
+### Minor Changes
+
+- [#140](https://github.com/wethegit/react-modal/pull/140) [`70b791a`](https://github.com/wethegit/react-modal/commit/70b791a0748a2d777e69867822dbc03a3adf0986) Thanks [@NicholasLancey](https://github.com/NicholasLancey)! - Upgrades to React 19
+
+### Patch Changes
+
+- [#145](https://github.com/wethegit/react-modal/pull/145) [`c3ba12f`](https://github.com/wethegit/react-modal/commit/c3ba12f958385a9d9aca9e4e428fd477d1ae4b75) Thanks [@marlonmarcello](https://github.com/marlonmarcello)! - fix: checks for undefined state
+
 ## 3.0.0
 
 ### Major Changes
