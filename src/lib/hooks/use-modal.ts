@@ -36,8 +36,12 @@ export function useModal(props: UseModalOptions = {}) {
     // we don't want focus back on the trigger
     if (current === ModalStates.CLOSED || !current) return
 
-    if (hash && window && window.location.hash === `#${hash}`) {
-      window.history.replaceState({}, "", window.location.pathname)
+    if (hash && typeof window !== "undefined" && window.location.hash === `#${hash}`) {
+      window.history.replaceState(
+        {},
+        "",
+        window.location.pathname + window.location.search
+      )
     }
 
     if (triggerRef && triggerRef.current) triggerRef.current.focus()
@@ -57,7 +61,7 @@ export function useModal(props: UseModalOptions = {}) {
 
     if (current === ModalStates.OPEN) return
 
-    if (hash && window && window.location.hash !== `#${hash}`) {
+    if (hash && typeof window !== "undefined" && window.location.hash !== `#${hash}`) {
       window.history.pushState({}, "", `#${hash}`)
     }
   }, [hash])
