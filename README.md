@@ -101,17 +101,18 @@ function MyModal() {
 
 Custom transition, focus management and hash-based state management.
 
-Use your favorite animation library, [@wethegit/react-hooks](https://wethegit.github.io/react-hooks/use-animate-presence) provides a simple one for these cases.
+The [`@starting-style`](https://developer.mozilla.org/en-US/docs/Web/CSS/@starting-style) CSS at-rule lets you define entry animations with pure CSS — no extra JavaScript or animation libraries needed.
 
 ```jsx
 import { useRef } from 'react'
-import { useAnimatePresence } from '@wethegit/react-hooks'
 import {
   Modal,
   ModalContent,
   ModalBackdrop,
   useModal
 } from "@wethegit/react-modal"
+
+import styles from "./my-styles.module.css"
 
 function MyModal() {
   const triggerButton = useRef(null)
@@ -124,11 +125,6 @@ function MyModal() {
     hash: "modal-with-hash",
   })
 
-  const { render, animate } = useAnimatePresence({
-    isVisible: isOpen,
-    duration: 800
-  })
-
   return (
     <>
       <button ref={triggerButton} onClick={toggle}>
@@ -136,15 +132,10 @@ function MyModal() {
       </button>
       <div ref={modalRootRef}></div>
 
-      {render && modalRootRef.current && (
-        <Modal 
-          renderTo={modalRootRef.current}
-          style={{
-          transition: `opacity 800ms ease-in-out`,
-          opacity: animate ? 1 : 0
-        }}>
+      {isOpen && modalRootRef.current && (
+        <Modal renderTo={modalRootRef.current}>
           <ModalBackdrop onClick={toggle} />
-          <ModalContent>
+          <ModalContent className={styles.modal}>
             <button onClick={toggle}>
               Close
             </button>
@@ -154,6 +145,22 @@ function MyModal() {
       )}
     </>
   )
+}
+```
+
+```css
+/* my-styles.module.css */
+.modal {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  opacity: 1;
+  transform: scale(1);
+}
+
+@starting-style {
+  .modal {
+    opacity: 0;
+    transform: scale(0.9);
+  }
 }
 ```
 

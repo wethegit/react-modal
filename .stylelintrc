@@ -8,6 +8,7 @@
   ],
   "plugins": ["stylelint-selector-bem-pattern"],
   "rules": {
+    "at-rule-no-unknown": [true, { "ignoreAtRules": ["starting-style"] }],
     "no-descending-specificity": null,
     "selector-class-pattern": null,
     "plugin/selector-bem-pattern": {

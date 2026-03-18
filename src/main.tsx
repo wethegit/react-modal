@@ -24,7 +24,12 @@ function CustomModal() {
       {isOpen && modalRootRef.current && (
         <Modal renderTo={modalRootRef.current}>
           <ModalBackdrop onClick={toggle} className={styles.CustomModalOverlay} />
-          <ModalContent className={classnames([styles.CustomModalContent])}>
+          <ModalContent
+            className={classnames([
+              styles.CustomModalContent,
+              styles.CustomModalTransition,
+            ])}
+          >
             <button onClick={toggle} className={styles.CustomModalClose}>
               Close
             </button>
