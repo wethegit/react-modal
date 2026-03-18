@@ -28,7 +28,7 @@ export function useModal(props: UseModalOptions = {}) {
       // an extra dependecy and stay within the render loop
       current = cur
 
-      if (cur !== ModalStates.CLOSED) return ModalStates.CLOSED      
+      if (cur !== ModalStates.CLOSED) return ModalStates.CLOSED
       return cur
     })
 
@@ -37,7 +37,6 @@ export function useModal(props: UseModalOptions = {}) {
     if (current === ModalStates.CLOSED || !current) return
 
     if (hash && window && window.location.hash === `#${hash}`) {
-      window.location.hash = ""
       window.history.replaceState({}, "", window.location.pathname)
     }
 
@@ -59,7 +58,7 @@ export function useModal(props: UseModalOptions = {}) {
     if (current === ModalStates.OPEN) return
 
     if (hash && window && window.location.hash !== `#${hash}`) {
-      window.location.hash = `#${hash}`
+      window.history.pushState({}, "", `#${hash}`)
     }
   }, [hash])
 
@@ -81,10 +80,15 @@ export function useModal(props: UseModalOptions = {}) {
     // Check for a hash on mount
     handleHashChange()
 
+    // hashchange fires when navigating to same-page anchors (e.g. <a href="#hash">)
     window.addEventListener("hashchange", handleHashChange)
+    // popstate fires when navigating via browser history (back/forward),
+    // which is what history.pushState entries use
+    window.addEventListener("popstate", handleHashChange)
 
     return () => {
       window.removeEventListener("hashchange", handleHashChange)
+      window.removeEventListener("popstate", handleHashChange)
     }
   }, [handleClose, handleOpen, hash])
 
