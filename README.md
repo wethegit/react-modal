@@ -196,9 +196,9 @@ You can override these as you see fit and as your setup allows.
 
 This component was built with focus accessibility best-practices at top-of-mind, and provides enough flexibility to allow you to create an accessible modal window.
 
-### Focus loop
+### Focus trap
 
-There are hidden elements at the start and end of the modal component, which, on focus, shift the user's focus to either the end or start of the content, respectively.
+The modal uses the native `<dialog>` element with the `showModal()` method, which automatically traps focus within the dialog. This ensures keyboard navigation stays within the modal while it is open.
 
 ### Focus on close
 
