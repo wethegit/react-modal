@@ -22,14 +22,14 @@
 }
 
 .CustomModalTransition {
-  transition: transform var(--transition-duration)
-    var(--ease, cubic-bezier(0.77, 0, 0.1, 1.39));
-  transform: scale(var(--scale, 0));
+  transition: transform 0.5s cubic-bezier(0.77, 0, 0.1, 1.39);
+  transform: scale(1);
 }
 
-.CustomModalTransitionOpen {
-  --ease: cubic-bezier(0.77, 0, 0.1, 1.39);
-  --scale: 1;
+@starting-style {
+  .CustomModalTransition {
+    transform: scale(0);
+  }
 }
 
 .CustomModalAbsolute {
