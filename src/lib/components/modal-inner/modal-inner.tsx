@@ -2,12 +2,9 @@ import { useEffect, useRef } from "react"
 
 import { classnames } from "../../../utils/classnames"
 
-import { ModalVisuallyHidden } from "../modal-visually-hidden"
-import { ModalFocusBounds } from "../modal-focus-bounds"
-
 import styles from "./modal-inner.module.scss"
 
-export interface ModalInnerProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ModalInnerProps extends React.HTMLAttributes<HTMLDialogElement> {
   /**
    * The content of the modal.
    */
@@ -16,45 +13,33 @@ export interface ModalInnerProps extends React.HTMLAttributes<HTMLDivElement> {
    * The className of the modal.
    */
   className?: string
+  /**
+   * Called when the cancel event fires (e.g. user presses Escape).
+   * The default browser close behaviour is always prevented so React state stays in control.
+   */
+  onCancel?: React.ReactEventHandler<HTMLDialogElement>
 }
 
-export function ModalInner({ children, className, ...props }: ModalInnerProps) {
-  const modalRef = useRef<HTMLDivElement>(null)
-  const firstFocusableElement = useRef<HTMLDivElement>(null)
-  const lastFocusableElement = useRef<HTMLDivElement>(null)
-
-  const focusStartingPosition = () => {
-    const element = firstFocusableElement.current
-    if (element) element.focus()
-  }
-
-  const focusEndingPosition = () => {
-    const element = lastFocusableElement.current
-    if (element) element.focus()
-  }
+export function ModalInner({ children, className, onCancel, ...props }: ModalInnerProps) {
+  const dialogRef = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
-    focusStartingPosition()
+    dialogRef.current?.showModal()
   }, [])
 
   return (
-    <div
+    <dialog
       className={classnames([styles.modalInner, className])}
-      ref={modalRef}
-      role="dialog"
-      aria-modal="true"
-      tabIndex={0}
+      ref={dialogRef}
       {...props}
+      onCancel={(e) => {
+        // Prevent the browser from closing the dialog so our React state
+        // remains in control. The useModal hook handles closing via Escape.
+        e.preventDefault()
+        onCancel?.(e)
+      }}
     >
-      <ModalVisuallyHidden onFocus={focusEndingPosition} />
-
-      <ModalFocusBounds ref={firstFocusableElement} />
-
       {children}
-
-      <ModalFocusBounds ref={lastFocusableElement} />
-
-      <ModalVisuallyHidden onFocus={focusStartingPosition} />
-    </div>
+    </dialog>
   )
 }
