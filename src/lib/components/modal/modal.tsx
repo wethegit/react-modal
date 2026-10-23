@@ -1,27 +1,64 @@
 "use client"
 
+import { useEffect, useRef } from "react"
 import ReactDOM from "react-dom"
-import { ModalInner } from "../modal-inner"
-import type { ModalInnerProps } from "../modal-inner"
 import { classnames } from "../../../utils/classnames"
 
 import styles from "./modal.module.scss"
-export interface ModalProps extends ModalInnerProps {
+
+export interface ModalProps extends React.DialogHTMLAttributes<HTMLDialogElement> {
   /**
    * The modal will be appended to the passed element instead of being rendered in place
    * @defaultValue defaults inPlace
    **/
   renderTo: HTMLElement
+  /**
+   * A ref to the native dialog element.
+   */
+  dialogRef?: { readonly current: HTMLDialogElement | null }
 }
 
-export function Modal({ renderTo, className, ...props }: ModalProps) {
-  const classes = classnames([styles.ModalFixed, className])
+export function Modal({
+  renderTo,
+  dialogRef: forwardedDialogRef,
+  className,
+  onCancel,
+  onClick,
+  children,
+  ...props
+}: ModalProps) {
+  const internalDialogRef = useRef<HTMLDialogElement>(null)
+  const dialogRef = forwardedDialogRef ?? internalDialogRef
 
-  const modalContent = <ModalInner className={classes} {...props} />
+  useEffect(() => {
+    if (dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal()
+  }, [dialogRef])
 
-  if (renderTo) {
-    return ReactDOM.createPortal(modalContent, renderTo)
+  const handleClick = (event: React.MouseEvent<HTMLDialogElement>) => {
+    onClick?.(event)
+    if (event.target === event.currentTarget && !event.defaultPrevented) {
+      dialogRef.current?.close()
+    }
   }
 
-  return modalContent
+  const modal = (
+    <dialog
+      className={classnames([styles.modal, className])}
+      ref={dialogRef as React.RefObject<HTMLDialogElement>}
+      {...props}
+      onClick={handleClick}
+      onCancel={(event) => {
+        event.preventDefault()
+        onCancel?.(event)
+      }}
+    >
+      {children}
+    </dialog>
+  )
+
+  if (renderTo) {
+    return ReactDOM.createPortal(modal, renderTo)
+  }
+
+  return modal
 }

@@ -1,15 +1,5 @@
-.CustomModalOverlay {
+.CustomModalOverlay::backdrop {
   background-color: rgb(125 125 125 / 80%);
-}
-
-.CustomModalClose {
-  border-radius: 0.25rem;
-  background-color: black;
-  color: white;
-  font-size: 1rem;
-  border: none;
-  cursor: pointer;
-  padding: 0.5em 1em;
 }
 
 .CustomModalContent {
@@ -22,16 +12,12 @@
 }
 
 .CustomModalTransition {
-  transition: transform var(--transition-duration)
-    var(--ease, cubic-bezier(0.77, 0, 0.1, 1.39));
-  transform: scale(var(--scale, 0));
+  transition: transform 0.5s cubic-bezier(0.77, 0, 0.1, 1.39);
+  transform: scale(1);
 }
 
-.CustomModalTransitionOpen {
-  --ease: cubic-bezier(0.77, 0, 0.1, 1.39);
-  --scale: 1;
-}
-
-.CustomModalAbsolute {
-  position: absolute;
+@starting-style {
+  .CustomModalTransition {
+    transform: scale(0);
+  }
 }
