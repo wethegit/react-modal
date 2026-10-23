@@ -25,7 +25,6 @@ function CustomModal() {
           renderTo={modalRootRef.current}
           dialogRef={dialogRef}
           className={styles.CustomModalOverlay}
-          onClick={(event) => event.target === event.currentTarget && toggle()}
         >
           <ModalContent className={styles.CustomModalContent}>
             <button onClick={toggle}>
@@ -62,7 +61,6 @@ function CustomModalOnBody() {
           renderTo={bodyRef.current}
           dialogRef={dialogRef}
           className={styles.CustomModalOverlay}
-          onClick={(event) => event.target === event.currentTarget && toggle()}
         >
           <ModalContent className={styles.CustomModalContent}>
             <button onClick={toggle}>
@@ -96,7 +94,6 @@ function ModalWithHash() {
           renderTo={modalRootRef.current}
           dialogRef={dialogRef}
           className={styles.CustomModalOverlay}
-          onClick={(event) => event.target === event.currentTarget && toggle()}
         >
           <ModalContent className={styles.CustomModalContent}>
             <button onClick={toggle}>

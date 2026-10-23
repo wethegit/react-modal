@@ -23,6 +23,7 @@ export function Modal({
   dialogRef: forwardedDialogRef,
   className,
   onCancel,
+  onClick,
   children,
   ...props
 }: ModalProps) {
@@ -33,11 +34,19 @@ export function Modal({
     if (dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal()
   }, [dialogRef])
 
+  const handleClick = (event: React.MouseEvent<HTMLDialogElement>) => {
+    onClick?.(event)
+    if (event.target === event.currentTarget && !event.defaultPrevented) {
+      dialogRef.current?.close()
+    }
+  }
+
   const modal = (
     <dialog
       className={classnames([styles.modal, className])}
       ref={dialogRef as React.RefObject<HTMLDialogElement>}
       {...props}
+      onClick={handleClick}
       onCancel={(event) => {
         event.preventDefault()
         onCancel?.(event)

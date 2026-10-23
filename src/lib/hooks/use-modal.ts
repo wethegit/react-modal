@@ -19,11 +19,12 @@ export interface UseModalOptions {
 export function useModal(props: UseModalOptions = {}) {
   const { triggerRef, hash } = props
   const [state, setState] = useState<ModalStates>(ModalStates.CLOSED)
+  const stateRef = useRef(state)
   const dialogRef = useRef<HTMLDialogElement>(null)
 
-  const handleClose = useCallback(() => {
-    if (state === ModalStates.CLOSED) return
-
+  const closeState = useCallback(() => {
+    if (stateRef.current === ModalStates.CLOSED) return
+    stateRef.current = ModalStates.CLOSED
     setState(ModalStates.CLOSED)
 
     if (hash && window && window.location.hash === `#${hash}`) {
@@ -31,21 +32,29 @@ export function useModal(props: UseModalOptions = {}) {
       window.history.replaceState({}, "", window.location.pathname)
     }
 
-    if (dialogRef.current?.open) dialogRef.current.close()
-
     if (triggerRef && triggerRef.current) triggerRef.current.focus()
-  }, [triggerRef, hash, state])
+  }, [triggerRef, hash])
+
+  const handleClose = useCallback(() => {
+    if (stateRef.current === ModalStates.CLOSED) return
+
+    if (dialogRef.current?.open) dialogRef.current.close()
+    closeState()
+  }, [closeState])
 
   const handleOpen = useCallback(() => {
-    const wasOpen = state === ModalStates.OPEN
-    if (!wasOpen) setState(ModalStates.OPEN)
+    const wasOpen = stateRef.current === ModalStates.OPEN
+    if (!wasOpen) {
+      stateRef.current = ModalStates.OPEN
+      setState(ModalStates.OPEN)
+    }
 
     if (dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal()
 
     if (!wasOpen && hash && window.location.hash !== `#${hash}`) {
       window.location.hash = `#${hash}`
     }
-  }, [hash, state])
+  }, [hash])
 
   const toggle = useCallback(() => {
     // check all states in case user tried to close the modal in a transition
@@ -71,6 +80,18 @@ export function useModal(props: UseModalOptions = {}) {
       window.removeEventListener("hashchange", handleHashChange)
     }
   }, [handleClose, handleOpen, hash])
+
+  useEffect(() => {
+    const dialog = dialogRef.current
+    if (!dialog) return
+
+    const handleDialogClose = () => {
+      if (!dialog.open) closeState()
+    }
+
+    dialog.addEventListener("close", handleDialogClose)
+    return () => dialog.removeEventListener("close", handleDialogClose)
+  }, [closeState])
 
   // Hook up the escape key
   useEffect(() => {
