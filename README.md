@@ -25,7 +25,7 @@ import "@wethegit/react-modal/style.css"
 
 ## Usage
 
-The `useModal` hook provides mechanisms for hooking into the modal state. We'll need to pass said `state` to the `<Modal>` component, as shown below. This approach allows us to abstract away state management, which becomes especially useful when [using a URL hash to manage the modal's state](#using-a-url-hash-to-manage-the-modal-state).
+The `useModal` hook provides mechanisms for hooking into the modal state. Pass its `dialogRef` to `<Modal>` so the hook can control that specific dialog's native modality. This approach allows us to abstract away state management, which becomes especially useful when [using a URL hash to manage the modal's state](#using-a-url-hash-to-manage-the-modal-state).
 
 The snippet below demonstrates the **minimum** required setup. No focus management, no animations.
 
@@ -38,7 +38,7 @@ import {
 } from "@wethegit/react-modal"
 
 function MyModal() {
-  const { isOpen, toggle } = useModal()
+  const { isOpen, toggle, dialogRef } = useModal()
 
   return (
     <>
@@ -47,7 +47,7 @@ function MyModal() {
       </button>
 
       {isOpen && (
-        <Modal>
+        <Modal dialogRef={dialogRef}>
           <ModalBackdrop onClick={toggle} />
           <ModalContent>
             <button onClick={toggle}>Close</button>
@@ -73,7 +73,7 @@ import {
 } from "@wethegit/react-modal"
 
 function MyModal() {
-  const { isOpen, toggle } = useModal({
+  const { isOpen, toggle, dialogRef } = useModal({
     hash: "my-modal-hash"
   })
 
@@ -84,7 +84,7 @@ function MyModal() {
       </button>
 
       {isOpen && (
-        <Modal>
+        <Modal dialogRef={dialogRef}>
           <ModalBackdrop onClick={toggle} />
           <ModalContent>
             <button onClick={toggle}>Close</button>
@@ -117,7 +117,7 @@ function MyModal() {
   const triggerButton = useRef(null)
   const modalRootRef = useRef(null)
 
-  const { isOpen, toggle } = useModal({
+  const { isOpen, toggle, dialogRef } = useModal({
     // `triggerRef` allows the focus to shift to whatever triggered the modal
     triggerRef: triggerButton,
     // `hash` will automatically open the modal when hash changes and will also update the hash when the modal opens/closes
@@ -137,7 +137,8 @@ function MyModal() {
       <div ref={modalRootRef}></div>
 
       {render && modalRootRef.current && (
-        <Modal 
+        <Modal
+          dialogRef={dialogRef}
           renderTo={modalRootRef.current}
           style={{
           transition: `opacity 800ms ease-in-out`,
@@ -165,6 +166,7 @@ function MyModal() {
 | -------------------- | --------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | renderTo         | HTMLElement   | null | If a valid HTMLElement is provided, the modal will be appended to that element. Otherwise will be rendered in place.                                                                                       |
 | className            | String    | null          |                                                                                                                                                                                                                                                                                                        |
+| dialogRef            | RefObject | null          | The ref returned by `useModal`, used to associate the hook with this specific native dialog.                                                                                                                                                                                                         |
 | children            | ReactNode | null          |                                                                                                                                                                                                                                                                                                        |
 
 ### `<ModalContent>`

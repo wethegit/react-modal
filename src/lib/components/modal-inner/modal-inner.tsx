@@ -14,18 +14,29 @@ export interface ModalInnerProps extends React.HTMLAttributes<HTMLDialogElement>
    */
   className?: string
   /**
+   * A ref to the native dialog element.
+   */
+  dialogRef?: React.RefObject<HTMLDialogElement>
+  /**
    * Called when the cancel event fires (e.g. user presses Escape).
    * The default browser close behaviour is always prevented so React state stays in control.
    */
   onCancel?: React.ReactEventHandler<HTMLDialogElement>
 }
 
-export function ModalInner({ children, className, onCancel, ...props }: ModalInnerProps) {
-  const dialogRef = useRef<HTMLDialogElement>(null)
+export function ModalInner({
+  children,
+  className,
+  dialogRef: forwardedDialogRef,
+  onCancel,
+  ...props
+}: ModalInnerProps) {
+  const internalDialogRef = useRef<HTMLDialogElement>(null)
+  const dialogRef = forwardedDialogRef ?? internalDialogRef
 
   useEffect(() => {
-    dialogRef.current?.showModal()
-  }, [])
+    if (dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal()
+  }, [dialogRef])
 
   return (
     <dialog

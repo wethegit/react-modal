@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 export enum ModalStates {
   CLOSED = "closed",
@@ -19,6 +19,7 @@ export interface UseModalOptions {
 export function useModal(props: UseModalOptions = {}) {
   const { triggerRef, hash } = props
   const [state, setState] = useState<ModalStates>(ModalStates.CLOSED)
+  const dialogRef = useRef<HTMLDialogElement>(null)
 
   const handleClose = useCallback(() => {
     let current: ModalStates | undefined
@@ -41,7 +42,7 @@ export function useModal(props: UseModalOptions = {}) {
       window.history.replaceState({}, "", window.location.pathname)
     }
 
-    document.querySelector<HTMLDialogElement>("dialog:modal")?.close()
+    if (dialogRef.current?.open) dialogRef.current.close()
 
     if (triggerRef && triggerRef.current) triggerRef.current.focus()
   }, [triggerRef, hash])
@@ -58,7 +59,12 @@ export function useModal(props: UseModalOptions = {}) {
       return cur
     })
 
-    if (current === ModalStates.OPEN) return
+    if (current === ModalStates.OPEN) {
+      if (dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal()
+      return
+    }
+
+    if (dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal()
 
     if (hash && window && window.location.hash !== `#${hash}`) {
       window.location.hash = `#${hash}`
@@ -105,6 +111,7 @@ export function useModal(props: UseModalOptions = {}) {
 
   return {
     isOpen: state === ModalStates.OPEN,
+    dialogRef,
     toggle,
   }
 }
