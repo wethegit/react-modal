@@ -16,7 +16,7 @@ export interface ModalInnerProps extends React.HTMLAttributes<HTMLDialogElement>
   /**
    * A ref to the native dialog element.
    */
-  dialogRef?: React.RefObject<HTMLDialogElement>
+  dialogRef?: React.RefObject<HTMLDialogElement | null>
   /**
    * Called when the cancel event fires (e.g. user presses Escape).
    * The default browser close behaviour is always prevented so React state stays in control.
