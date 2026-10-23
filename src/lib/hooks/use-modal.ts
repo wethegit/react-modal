@@ -93,19 +93,6 @@ export function useModal(props: UseModalOptions = {}) {
     }
   }, [handleClose, handleOpen, hash])
 
-  // Hook up the escape key
-  useEffect(() => {
-    const onKeyUp = (e: KeyboardEvent) => {
-      if (e.code === "Escape") handleClose()
-    }
-
-    window.addEventListener("keyup", onKeyUp)
-
-    return () => {
-      window.removeEventListener("keyup", onKeyUp)
-    }
-  }, [handleClose])
-
   return {
     isOpen: state === ModalStates.OPEN,
     dialogRef,
