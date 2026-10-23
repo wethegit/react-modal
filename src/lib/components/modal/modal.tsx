@@ -1,23 +1,55 @@
 "use client"
 
+import { useEffect, useRef } from "react"
 import ReactDOM from "react-dom"
-import { ModalInner } from "../modal-inner"
-import type { ModalInnerProps } from "../modal-inner"
+import { classnames } from "../../../utils/classnames"
 
-export interface ModalProps extends ModalInnerProps {
+import styles from "./modal.module.scss"
+
+export interface ModalProps extends React.DialogHTMLAttributes<HTMLDialogElement> {
   /**
    * The modal will be appended to the passed element instead of being rendered in place
    * @defaultValue defaults inPlace
    **/
   renderTo: HTMLElement
+  /**
+   * A ref to the native dialog element.
+   */
+  dialogRef?: { readonly current: HTMLDialogElement | null }
 }
 
-export function Modal({ renderTo, ...props }: ModalProps) {
-  const modalContent = <ModalInner {...props} />
+export function Modal({
+  renderTo,
+  dialogRef: forwardedDialogRef,
+  className,
+  onCancel,
+  children,
+  ...props
+}: ModalProps) {
+  const internalDialogRef = useRef<HTMLDialogElement>(null)
+  const dialogRef = forwardedDialogRef ?? internalDialogRef
+
+  useEffect(() => {
+    if (dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal()
+  }, [dialogRef])
+
+  const modal = (
+    <dialog
+      className={classnames([styles.modal, className])}
+      ref={dialogRef as React.RefObject<HTMLDialogElement>}
+      {...props}
+      onCancel={(event) => {
+        event.preventDefault()
+        onCancel?.(event)
+      }}
+    >
+      {children}
+    </dialog>
+  )
 
   if (renderTo) {
-    return ReactDOM.createPortal(modalContent, renderTo)
+    return ReactDOM.createPortal(modal, renderTo)
   }
 
-  return modalContent
+  return modal
 }

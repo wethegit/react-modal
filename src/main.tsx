@@ -1,8 +1,7 @@
 import React, { useRef, useEffect } from "react"
 import { createRoot } from "react-dom/client"
 
-import { Modal, ModalContent, useModal, ModalBackdrop } from "./lib"
-import { classnames } from "./utils/classnames"
+import { Modal, ModalContent, useModal } from "./lib"
 
 import styles from "./main.module.css"
 
@@ -22,10 +21,14 @@ function CustomModal() {
       <div ref={modalRootRef}></div>
 
       {isOpen && modalRootRef.current && (
-        <Modal renderTo={modalRootRef.current} dialogRef={dialogRef}>
-          <ModalBackdrop onClick={toggle} className={styles.CustomModalOverlay} />
-          <ModalContent className={classnames([styles.CustomModalContent])}>
-            <button onClick={toggle} className={styles.CustomModalClose}>
+        <Modal
+          renderTo={modalRootRef.current}
+          dialogRef={dialogRef}
+          className={styles.CustomModalOverlay}
+          onClick={(event) => event.target === event.currentTarget && toggle()}
+        >
+          <ModalContent className={styles.CustomModalContent}>
+            <button onClick={toggle}>
               Close
             </button>
             <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
@@ -57,12 +60,12 @@ function CustomModalOnBody() {
       {isOpen && bodyRef.current && (
         <Modal
           renderTo={bodyRef.current}
-          className={styles.CustomModalAbsolute}
           dialogRef={dialogRef}
+          className={styles.CustomModalOverlay}
+          onClick={(event) => event.target === event.currentTarget && toggle()}
         >
-          <ModalBackdrop onClick={toggle} className={styles.CustomModalOverlay} />
-          <ModalContent className={classnames([styles.CustomModalContent])}>
-            <button onClick={toggle} className={styles.CustomModalClose}>
+          <ModalContent className={styles.CustomModalContent}>
+            <button onClick={toggle}>
               Close
             </button>
             <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
@@ -89,10 +92,14 @@ function ModalWithHash() {
       <div ref={modalRootRef}></div>
 
       {isOpen && modalRootRef.current && (
-        <Modal renderTo={modalRootRef.current} dialogRef={dialogRef}>
-          <ModalBackdrop onClick={toggle} className={styles.CustomModalOverlay} />
+        <Modal
+          renderTo={modalRootRef.current}
+          dialogRef={dialogRef}
+          className={styles.CustomModalOverlay}
+          onClick={(event) => event.target === event.currentTarget && toggle()}
+        >
           <ModalContent className={styles.CustomModalContent}>
-            <button onClick={toggle} className={styles.CustomModalClose}>
+            <button onClick={toggle}>
               Close
             </button>
             <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
