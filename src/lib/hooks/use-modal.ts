@@ -60,21 +60,16 @@ export function useModal(props: UseModalOptions = {}) {
   }, [closeState, dialogRef])
 
   const handleOpen = useCallback(() => {
-    const wasOpen = stateRef.current === ModalStates.OPEN
-    if (!wasOpen) {
-      stateRef.current = ModalStates.OPEN
-      setState(ModalStates.OPEN)
-    }
+    if (stateRef.current === ModalStates.OPEN) return
+    stateRef.current = ModalStates.OPEN
+    setState(ModalStates.OPEN)
 
-    if (dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal()
-
-    if (!wasOpen && hash && window.location.hash !== `#${hash}`) {
+    if (hash && window.location.hash !== `#${hash}`) {
       window.location.hash = `#${hash}`
     }
-  }, [dialogRef, hash])
+  }, [hash])
 
   const toggle = useCallback(() => {
-    // check all states in case user tried to close the modal in a transition
     if (state === ModalStates.CLOSED) handleOpen()
     else handleClose()
   }, [handleClose, handleOpen, state])
