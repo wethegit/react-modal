@@ -95,13 +95,12 @@ function MyModal() {
 
 ## Full example
 
-Custom transition, focus management and hash-based state management.
+Focus management, rendering to a custom element, and hash-based state management.
 
-Use your favorite animation library, [@wethegit/react-hooks](https://wethegit.github.io/react-hooks/use-animate-presence) provides a simple one for these cases.
+**Important:** Animation with `useAnimatePresence` is not included in this refactor. Support is deferred to [#155](https://github.com/wethegit/react-modal/issues/155). Render the modal conditionally with `isOpen`, without delaying unmount for an exit animation.
 
 ```jsx
 import { useRef } from 'react'
-import { useAnimatePresence } from '@wethegit/react-hooks'
 import {
   Modal,
   ModalContent,
@@ -119,11 +118,6 @@ function MyModal() {
     hash: "modal-with-hash",
   })
 
-  const { render, animate } = useAnimatePresence({
-    isVisible: isOpen,
-    duration: 800
-  })
-
   return (
     <>
       <button ref={triggerButton} onClick={toggle}>
@@ -131,14 +125,11 @@ function MyModal() {
       </button>
       <div ref={modalRootRef}></div>
 
-      {render && modalRootRef.current && (
+      {isOpen && modalRootRef.current && (
         <Modal
           dialogRef={dialogRef}
           renderTo={modalRootRef.current}
-          style={{
-          transition: `opacity 800ms ease-in-out`,
-          opacity: animate ? 1 : 0
-        }}>
+        >
           <ModalContent>
             <button onClick={toggle}>
               Close
