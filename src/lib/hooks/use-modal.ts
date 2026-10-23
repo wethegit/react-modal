@@ -22,20 +22,9 @@ export function useModal(props: UseModalOptions = {}) {
   const dialogRef = useRef<HTMLDialogElement>(null)
 
   const handleClose = useCallback(() => {
-    let current: ModalStates | undefined
+    if (state === ModalStates.CLOSED) return
 
-    setState((cur) => {
-      // get the current state from the hook to avoid
-      // an extra dependecy and stay within the render loop
-      current = cur
-
-      if (cur !== ModalStates.CLOSED) return ModalStates.CLOSED
-      return cur
-    })
-
-    // If the modal is already closed, don't do anything
-    // we don't want focus back on the trigger
-    if (current === ModalStates.CLOSED || !current) return
+    setState(ModalStates.CLOSED)
 
     if (hash && window && window.location.hash === `#${hash}`) {
       window.location.hash = ""
@@ -45,31 +34,18 @@ export function useModal(props: UseModalOptions = {}) {
     if (dialogRef.current?.open) dialogRef.current.close()
 
     if (triggerRef && triggerRef.current) triggerRef.current.focus()
-  }, [triggerRef, hash])
+  }, [triggerRef, hash, state])
 
   const handleOpen = useCallback(() => {
-    let current: ModalStates | undefined
-
-    setState((cur) => {
-      if (cur !== ModalStates.OPEN) return ModalStates.OPEN
-
-      // get the current state from the hook to avoid
-      // an extra dependecy and stay within the render loop
-      current = cur
-      return cur
-    })
-
-    if (current === ModalStates.OPEN) {
-      if (dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal()
-      return
-    }
+    const wasOpen = state === ModalStates.OPEN
+    if (!wasOpen) setState(ModalStates.OPEN)
 
     if (dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal()
 
-    if (hash && window && window.location.hash !== `#${hash}`) {
+    if (!wasOpen && hash && window.location.hash !== `#${hash}`) {
       window.location.hash = `#${hash}`
     }
-  }, [hash])
+  }, [hash, state])
 
   const toggle = useCallback(() => {
     // check all states in case user tried to close the modal in a transition

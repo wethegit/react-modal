@@ -32,7 +32,6 @@ The snippet below demonstrates the **minimum** required setup. No focus manageme
 ```jsx
 import {
   Modal,
-  ModalBackdrop,
   ModalContent,
   useModal
 } from "@wethegit/react-modal"
@@ -47,8 +46,10 @@ function MyModal() {
       </button>
 
       {isOpen && (
-        <Modal dialogRef={dialogRef}>
-          <ModalBackdrop onClick={toggle} />
+        <Modal
+          dialogRef={dialogRef}
+          onClick={(event) => event.target === event.currentTarget && toggle()}
+        >
           <ModalContent>
             <button onClick={toggle}>Close</button>
             <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
@@ -68,7 +69,6 @@ It's as easy as passing a `hash` prop to the `useModal` hook. The hook will then
 import {
   Modal,
   ModalContent,
-  ModalBackdrop,
   useModal
 } from "@wethegit/react-modal"
 
@@ -84,8 +84,10 @@ function MyModal() {
       </button>
 
       {isOpen && (
-        <Modal dialogRef={dialogRef}>
-          <ModalBackdrop onClick={toggle} />
+        <Modal
+          dialogRef={dialogRef}
+          onClick={(event) => event.target === event.currentTarget && toggle()}
+        >
           <ModalContent>
             <button onClick={toggle}>Close</button>
             <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
@@ -109,7 +111,6 @@ import { useAnimatePresence } from '@wethegit/react-hooks'
 import {
   Modal,
   ModalContent,
-  ModalBackdrop,
   useModal
 } from "@wethegit/react-modal"
 
@@ -140,11 +141,11 @@ function MyModal() {
         <Modal
           dialogRef={dialogRef}
           renderTo={modalRootRef.current}
+          onClick={(event) => event.target === event.currentTarget && toggle()}
           style={{
           transition: `opacity 800ms ease-in-out`,
           opacity: animate ? 1 : 0
         }}>
-          <ModalBackdrop onClick={toggle} />
           <ModalContent>
             <button onClick={toggle}>
               Close
@@ -169,15 +170,11 @@ function MyModal() {
 | dialogRef            | RefObject | null          | The ref returned by `useModal`, used to associate the hook with this specific native dialog.                                                                                                                                                                                                         |
 | children            | ReactNode | null          |                                                                                                                                                                                                                                                                                                        |
 
+The native dialog backdrop is styled with the `::backdrop` pseudo-element. Clicking outside the dialog content can be handled by checking whether the click event target is the dialog itself, as shown in the examples.
+
 ### `<ModalContent>`
 
 A wrapper for the modal's content. This component is optional, but it's recommended to use it for styling purposes.
-
-Any valid `<div>` props can be passed to this component.
-
-### `<ModalBackdrop>`
-
-A wrapper for the modal's backdrop. This component is optional, but it's recommended to use it for styling purposes.
 
 Any valid `<div>` props can be passed to this component.
 
