@@ -46,10 +46,7 @@ function MyModal() {
       </button>
 
       {isOpen && (
-        <Modal
-          dialogRef={dialogRef}
-          onClick={(event) => event.target === event.currentTarget && toggle()}
-        >
+        <Modal dialogRef={dialogRef}>
           <ModalContent>
             <button onClick={toggle}>Close</button>
             <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
@@ -84,10 +81,7 @@ function MyModal() {
       </button>
 
       {isOpen && (
-        <Modal
-          dialogRef={dialogRef}
-          onClick={(event) => event.target === event.currentTarget && toggle()}
-        >
+        <Modal dialogRef={dialogRef}>
           <ModalContent>
             <button onClick={toggle}>Close</button>
             <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
@@ -141,7 +135,6 @@ function MyModal() {
         <Modal
           dialogRef={dialogRef}
           renderTo={modalRootRef.current}
-          onClick={(event) => event.target === event.currentTarget && toggle()}
           style={{
           transition: `opacity 800ms ease-in-out`,
           opacity: animate ? 1 : 0
@@ -170,7 +163,7 @@ function MyModal() {
 | dialogRef            | RefObject | null          | The ref returned by `useModal`, used to associate the hook with this specific native dialog.                                                                                                                                                                                                         |
 | children            | ReactNode | null          |                                                                                                                                                                                                                                                                                                        |
 
-The native dialog backdrop is styled with the `::backdrop` pseudo-element. Clicking outside the dialog content can be handled by checking whether the click event target is the dialog itself, as shown in the examples.
+The native dialog backdrop is styled with the `::backdrop` pseudo-element. Clicking the backdrop closes the modal automatically.
 
 ### `<ModalContent>`
 
