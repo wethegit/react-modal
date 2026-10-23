@@ -3,10 +3,12 @@
 import { useEffect, useRef } from "react"
 import ReactDOM from "react-dom"
 import { classnames } from "../../../utils/classnames"
+import { ModalContent, type ModalContentProps } from "../modal-content/modal-content"
 
 import styles from "./modal.module.scss"
 
-export interface ModalProps extends React.DialogHTMLAttributes<HTMLDialogElement> {
+export interface ModalProps
+  extends Omit<React.DialogHTMLAttributes<HTMLDialogElement>, "children"> {
   /**
    * The modal will be appended to the passed element instead of being rendered in place
    * @defaultValue defaults inPlace
@@ -16,6 +18,7 @@ export interface ModalProps extends React.DialogHTMLAttributes<HTMLDialogElement
    * A ref to the native dialog element.
    */
   dialogRef?: { readonly current: HTMLDialogElement | null }
+  children: React.ReactElement<ModalContentProps, typeof ModalContent>
 }
 
 export function Modal({
@@ -41,38 +44,10 @@ export function Modal({
     if (dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal()
   }, [dialogRef, renderTo])
 
-  const isOutsideContent = (event: React.PointerEvent<HTMLDialogElement>) => {
-    const { currentTarget, clientX, clientY } = event
-
-    for (const child of Array.from(currentTarget.childNodes)) {
-      let rects: DOMRect[]
-
-      if (child.nodeType === Node.TEXT_NODE) {
-        if (!child.textContent?.trim()) continue
-        const range = document.createRange()
-        range.selectNode(child)
-        rects = Array.from(range.getClientRects())
-      } else if (child instanceof Element) {
-        rects = [child.getBoundingClientRect()]
-      } else {
-        continue
-      }
-
-      if (
-        rects.some(
-          (rect) =>
-            clientX >= rect.left &&
-            clientX <= rect.right &&
-            clientY >= rect.top &&
-            clientY <= rect.bottom
-        )
-      ) {
-        return false
-      }
-    }
-
-    return true
-  }
+  const isOutsideContent = (event: React.PointerEvent<HTMLDialogElement>) =>
+    !event.nativeEvent
+      .composedPath()
+      .includes(event.currentTarget.firstElementChild as Element)
 
   const handleClick = (event: React.MouseEvent<HTMLDialogElement>) => {
     onClick?.(event)

@@ -158,7 +158,7 @@ The native dialog backdrop is styled with the `::backdrop` pseudo-element. Click
 
 ### `<ModalContent>`
 
-A wrapper for the modal's content. This component is optional, but it's recommended to use it for styling purposes.
+A required wrapper for the modal's content. It also defines the content boundary used to distinguish backdrop interactions from clicks inside the modal.
 
 Any valid `<div>` props can be passed to this component.
 
