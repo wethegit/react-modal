@@ -28,7 +28,7 @@ export function useModal(props: UseModalOptions = {}) {
       // an extra dependecy and stay within the render loop
       current = cur
 
-      if (cur !== ModalStates.CLOSED) return ModalStates.CLOSED      
+      if (cur !== ModalStates.CLOSED) return ModalStates.CLOSED
       return cur
     })
 
@@ -40,6 +40,8 @@ export function useModal(props: UseModalOptions = {}) {
       window.location.hash = ""
       window.history.replaceState({}, "", window.location.pathname)
     }
+
+    document.querySelector<HTMLDialogElement>("dialog:modal")?.close()
 
     if (triggerRef && triggerRef.current) triggerRef.current.focus()
   }, [triggerRef, hash])
