@@ -1,15 +1,14 @@
 import React, { useRef, useEffect } from "react"
 import { createRoot } from "react-dom/client"
 
-import { Modal, ModalContent, useModal, ModalBackdrop } from "./lib"
-import { classnames } from "./utils/classnames"
+import { Modal, ModalContent, useModal } from "./lib"
 
 import styles from "./main.module.css"
 
 function CustomModal() {
   const triggerButton = useRef(null)
   const modalRootRef = useRef(null)
-  const { isOpen, toggle } = useModal({
+  const { isOpen, toggle, dialogRef } = useModal({
     triggerRef: triggerButton,
   })
 
@@ -22,10 +21,13 @@ function CustomModal() {
       <div ref={modalRootRef}></div>
 
       {isOpen && modalRootRef.current && (
-        <Modal renderTo={modalRootRef.current}>
-          <ModalBackdrop onClick={toggle} className={styles.CustomModalOverlay} />
-          <ModalContent className={classnames([styles.CustomModalContent])}>
-            <button onClick={toggle} className={styles.CustomModalClose}>
+        <Modal
+          renderTo={modalRootRef.current}
+          dialogRef={dialogRef}
+          className={styles.CustomModalOverlay}
+        >
+          <ModalContent className={styles.CustomModalContent}>
+            <button onClick={toggle}>
               Close
             </button>
             <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
@@ -39,7 +41,7 @@ function CustomModal() {
 function CustomModalOnBody() {
   const triggerButton = useRef(null)
   const bodyRef = useRef<HTMLElement | null>(null)
-  const { isOpen, toggle } = useModal({
+  const { isOpen, toggle, dialogRef } = useModal({
     triggerRef: triggerButton,
   })
 
@@ -55,10 +57,13 @@ function CustomModalOnBody() {
       </button>
 
       {isOpen && bodyRef.current && (
-        <Modal renderTo={bodyRef.current} className={styles.CustomModalAbsolute}>
-          <ModalBackdrop onClick={toggle} className={styles.CustomModalOverlay} />
-          <ModalContent className={classnames([styles.CustomModalContent])}>
-            <button onClick={toggle} className={styles.CustomModalClose}>
+        <Modal
+          renderTo={bodyRef.current}
+          dialogRef={dialogRef}
+          className={styles.CustomModalOverlay}
+        >
+          <ModalContent className={styles.CustomModalContent}>
+            <button onClick={toggle}>
               Close
             </button>
             <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
@@ -72,7 +77,7 @@ function CustomModalOnBody() {
 function ModalWithHash() {
   const triggerButton = useRef(null)
   const modalRootRef = useRef(null)
-  const { isOpen, toggle } = useModal({
+  const { isOpen, toggle, dialogRef } = useModal({
     triggerRef: triggerButton,
     hash: "modal-with-hash",
   })
@@ -85,10 +90,13 @@ function ModalWithHash() {
       <div ref={modalRootRef}></div>
 
       {isOpen && modalRootRef.current && (
-        <Modal renderTo={modalRootRef.current}>
-          <ModalBackdrop onClick={toggle} className={styles.CustomModalOverlay} />
+        <Modal
+          renderTo={modalRootRef.current}
+          dialogRef={dialogRef}
+          className={styles.CustomModalOverlay}
+        >
           <ModalContent className={styles.CustomModalContent}>
-            <button onClick={toggle} className={styles.CustomModalClose}>
+            <button onClick={toggle}>
               Close
             </button>
             <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
