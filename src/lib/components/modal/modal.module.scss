@@ -13,6 +13,15 @@
   width: 100vw;
 }
 
+@supports (height: 100dvh) and (width: 100dvw) {
+  .modal {
+    height: 100dvh;
+    max-height: 100dvh;
+    max-width: 100dvw;
+    width: 100dvw;
+  }
+}
+
 .modal:not([open]) {
   display: none;
 }
