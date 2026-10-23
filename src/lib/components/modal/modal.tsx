@@ -44,10 +44,13 @@ export function Modal({
     if (dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal()
   }, [dialogRef, renderTo])
 
-  const isOutsideContent = (event: React.PointerEvent<HTMLDialogElement>) =>
-    !event.nativeEvent
-      .composedPath()
-      .includes(event.currentTarget.firstElementChild as Element)
+  const isOutsideContent = (event: React.PointerEvent<HTMLDialogElement>) => {
+    const path = event.nativeEvent.composedPath()
+    return (
+      path.includes(event.currentTarget) &&
+      !path.includes(event.currentTarget.firstElementChild as Element)
+    )
+  }
 
   const handleClick = (event: React.MouseEvent<HTMLDialogElement>) => {
     onClick?.(event)
