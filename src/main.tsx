@@ -9,7 +9,7 @@ import styles from "./main.module.css"
 function CustomModal() {
   const triggerButton = useRef(null)
   const modalRootRef = useRef(null)
-  const { isOpen, toggle } = useModal({
+  const { isOpen, toggle, dialogRef } = useModal({
     triggerRef: triggerButton,
   })
 
@@ -22,7 +22,7 @@ function CustomModal() {
       <div ref={modalRootRef}></div>
 
       {isOpen && modalRootRef.current && (
-        <Modal renderTo={modalRootRef.current}>
+        <Modal renderTo={modalRootRef.current} dialogRef={dialogRef}>
           <ModalBackdrop onClick={toggle} className={styles.CustomModalOverlay} />
           <ModalContent className={classnames([styles.CustomModalContent])}>
             <button onClick={toggle} className={styles.CustomModalClose}>
@@ -39,7 +39,7 @@ function CustomModal() {
 function CustomModalOnBody() {
   const triggerButton = useRef(null)
   const bodyRef = useRef<HTMLElement | null>(null)
-  const { isOpen, toggle } = useModal({
+  const { isOpen, toggle, dialogRef } = useModal({
     triggerRef: triggerButton,
   })
 
@@ -55,7 +55,11 @@ function CustomModalOnBody() {
       </button>
 
       {isOpen && bodyRef.current && (
-        <Modal renderTo={bodyRef.current} className={styles.CustomModalAbsolute}>
+        <Modal
+          renderTo={bodyRef.current}
+          className={styles.CustomModalAbsolute}
+          dialogRef={dialogRef}
+        >
           <ModalBackdrop onClick={toggle} className={styles.CustomModalOverlay} />
           <ModalContent className={classnames([styles.CustomModalContent])}>
             <button onClick={toggle} className={styles.CustomModalClose}>
@@ -72,7 +76,7 @@ function CustomModalOnBody() {
 function ModalWithHash() {
   const triggerButton = useRef(null)
   const modalRootRef = useRef(null)
-  const { isOpen, toggle } = useModal({
+  const { isOpen, toggle, dialogRef } = useModal({
     triggerRef: triggerButton,
     hash: "modal-with-hash",
   })
@@ -85,7 +89,7 @@ function ModalWithHash() {
       <div ref={modalRootRef}></div>
 
       {isOpen && modalRootRef.current && (
-        <Modal renderTo={modalRootRef.current}>
+        <Modal renderTo={modalRootRef.current} dialogRef={dialogRef}>
           <ModalBackdrop onClick={toggle} className={styles.CustomModalOverlay} />
           <ModalContent className={styles.CustomModalContent}>
             <button onClick={toggle} className={styles.CustomModalClose}>
