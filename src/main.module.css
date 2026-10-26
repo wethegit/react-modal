@@ -1,5 +1,20 @@
 .CustomModalOverlay::backdrop {
   background-color: rgb(125 125 125 / 80%);
+  transition: background-color 0.5s ease;
+}
+
+.CustomModalOverlay {
+  opacity: 0;
+  transition: opacity 0.5s ease, display 0.5s allow-discrete, overlay 0.5s allow-discrete;
+}
+
+.CustomModalOverlay[open] {
+  opacity: 1;
+}
+
+.CustomModalOverlay:not([open]) .CustomModalTransition {
+  opacity: 0;
+  transform: scale(0);
 }
 
 .CustomModalContent {
@@ -17,6 +32,10 @@
 }
 
 @starting-style {
+  .CustomModalOverlay[open] {
+    opacity: 0;
+  }
+
   .CustomModalTransition {
     transform: scale(0);
   }
