@@ -1,5 +1,13 @@
 # @wethegit/react-modal
 
+## 4.0.0
+
+### Major Changes
+
+- [#154](https://github.com/wethegit/react-modal/pull/154) [`6609cd1`](https://github.com/wethegit/react-modal/commit/6609cd1f32459900365b440c9b308a83d4024403) Thanks [@copilot-swe-agent](https://github.com/apps/copilot-swe-agent)! - Replace the custom modal and focus trap with native `<dialog>` and `showModal()`.
+
+  BREAKING: Remove `ModalBackdrop` in favor of the native `::backdrop`. Pass the `dialogRef` returned by `useModal` to `Modal` to synchronize native closing with hook state and focus restoration. `Modal` now renders its children directly inside the dialog, centers them, and handles backdrop clicks internally.
+
 ## 3.2.0
 
 ### Minor Changes
