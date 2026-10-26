@@ -14,6 +14,7 @@ export default defineConfig({
       // eslint-disable-next-line no-undef
       entry: resolve(__dirname, "src/lib/index.ts"),
       name: "ReactModal",
+      cssFileName: "style",
       formats: ["es", "cjs"],
     },
     rollupOptions: {
