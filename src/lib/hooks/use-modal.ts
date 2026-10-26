@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 export enum ModalStates {
   CLOSED = "closed",
@@ -19,22 +19,12 @@ export interface UseModalOptions {
 export function useModal(props: UseModalOptions = {}) {
   const { triggerRef, hash } = props
   const [state, setState] = useState<ModalStates>(ModalStates.CLOSED)
+  const stateRef = useRef(state)
 
-  const handleClose = useCallback(() => {
-    let current: ModalStates | undefined
-
-    setState((cur) => {
-      // get the current state from the hook to avoid
-      // an extra dependecy and stay within the render loop
-      current = cur
-
-      if (cur !== ModalStates.CLOSED) return ModalStates.CLOSED
-      return cur
-    })
-
-    // If the modal is already closed, don't do anything
-    // we don't want focus back on the trigger
-    if (current === ModalStates.CLOSED || !current) return
+  const closeState = useCallback(() => {
+    if (stateRef.current === ModalStates.CLOSED) return
+    stateRef.current = ModalStates.CLOSED
+    setState(ModalStates.CLOSED)
 
     if (hash && typeof window !== "undefined" && window.location.hash === `#${hash}`) {
       window.history.replaceState(
@@ -47,19 +37,35 @@ export function useModal(props: UseModalOptions = {}) {
     if (triggerRef && triggerRef.current) triggerRef.current.focus()
   }, [triggerRef, hash])
 
+  const dialogRef = useMemo(() => {
+    let dialog: HTMLDialogElement | null = null
+    const handleDialogClose = () => {
+      if (dialog && !dialog.open) closeState()
+    }
+
+    return {
+      get current() {
+        return dialog
+      },
+      set current(node: HTMLDialogElement | null) {
+        dialog?.removeEventListener("close", handleDialogClose)
+        dialog = node
+        dialog?.addEventListener("close", handleDialogClose)
+      },
+    }
+  }, [closeState])
+
+  const handleClose = useCallback(() => {
+    if (stateRef.current === ModalStates.CLOSED) return
+
+    if (dialogRef.current?.open) dialogRef.current.close()
+    closeState()
+  }, [closeState, dialogRef])
+
   const handleOpen = useCallback(() => {
-    let current: ModalStates | undefined
-
-    setState((cur) => {
-      if (cur !== ModalStates.OPEN) return ModalStates.OPEN
-
-      // get the current state from the hook to avoid
-      // an extra dependecy and stay within the render loop
-      current = cur
-      return cur
-    })
-
-    if (current === ModalStates.OPEN) return
+    if (stateRef.current === ModalStates.OPEN) return
+    stateRef.current = ModalStates.OPEN
+    setState(ModalStates.OPEN)
 
     if (hash && typeof window !== "undefined" && window.location.hash !== `#${hash}`) {
       window.history.pushState({}, "", `#${hash}`)
@@ -67,7 +73,6 @@ export function useModal(props: UseModalOptions = {}) {
   }, [hash])
 
   const toggle = useCallback(() => {
-    // check all states in case user tried to close the modal in a transition
     if (state === ModalStates.CLOSED) handleOpen()
     else handleClose()
   }, [handleClose, handleOpen, state])
@@ -96,21 +101,9 @@ export function useModal(props: UseModalOptions = {}) {
     }
   }, [handleClose, handleOpen, hash])
 
-  // Hook up the escape key
-  useEffect(() => {
-    const onKeyUp = (e: KeyboardEvent) => {
-      if (e.code === "Escape") handleClose()
-    }
-
-    window.addEventListener("keyup", onKeyUp)
-
-    return () => {
-      window.removeEventListener("keyup", onKeyUp)
-    }
-  }, [handleClose])
-
   return {
     isOpen: state === ModalStates.OPEN,
+    dialogRef,
     toggle,
   }
 }

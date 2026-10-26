@@ -25,20 +25,19 @@ import "@wethegit/react-modal/style.css"
 
 ## Usage
 
-The `useModal` hook provides mechanisms for hooking into the modal state. We'll need to pass said `state` to the `<Modal>` component, as shown below. This approach allows us to abstract away state management, which becomes especially useful when [using a URL hash to manage the modal's state](#using-a-url-hash-to-manage-the-modal-state).
+The `useModal` hook provides mechanisms for hooking into the modal state. Pass its `dialogRef` to `<Modal>` so the hook can control that specific dialog's native modality. This approach allows us to abstract away state management, which becomes especially useful when [using a URL hash to manage the modal's state](#using-a-url-hash-to-manage-the-modal-state).
 
 The snippet below demonstrates the **minimum** required setup. No focus management, no animations.
 
 ```jsx
 import {
   Modal,
-  ModalBackdrop,
   ModalContent,
   useModal
 } from "@wethegit/react-modal"
 
 function MyModal() {
-  const { isOpen, toggle } = useModal()
+  const { isOpen, toggle, dialogRef } = useModal()
 
   return (
     <>
@@ -47,8 +46,7 @@ function MyModal() {
       </button>
 
       {isOpen && (
-        <Modal>
-          <ModalBackdrop onClick={toggle} />
+        <Modal dialogRef={dialogRef}>
           <ModalContent>
             <button onClick={toggle}>Close</button>
             <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
@@ -68,12 +66,11 @@ It's as easy as passing a `hash` prop to the `useModal` hook. The hook will then
 import {
   Modal,
   ModalContent,
-  ModalBackdrop,
   useModal
 } from "@wethegit/react-modal"
 
 function MyModal() {
-  const { isOpen, toggle } = useModal({
+  const { isOpen, toggle, dialogRef } = useModal({
     hash: "my-modal-hash"
   })
 
@@ -84,8 +81,7 @@ function MyModal() {
       </button>
 
       {isOpen && (
-        <Modal>
-          <ModalBackdrop onClick={toggle} />
+        <Modal dialogRef={dialogRef}>
           <ModalContent>
             <button onClick={toggle}>Close</button>
             <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
@@ -99,17 +95,15 @@ function MyModal() {
 
 ## Full example
 
-Custom transition, focus management and hash-based state management.
+Focus management, rendering to a custom element, and hash-based state management.
 
-Use your favorite animation library, [@wethegit/react-hooks](https://wethegit.github.io/react-hooks/use-animate-presence) provides a simple one for these cases.
+**Important:** Animation with `useAnimatePresence` is not included in this refactor. Support is deferred to [#155](https://github.com/wethegit/react-modal/issues/155). Render the modal conditionally with `isOpen`, without delaying unmount for an exit animation.
 
 ```jsx
 import { useRef } from 'react'
-import { useAnimatePresence } from '@wethegit/react-hooks'
 import {
   Modal,
   ModalContent,
-  ModalBackdrop,
   useModal
 } from "@wethegit/react-modal"
 
@@ -117,16 +111,11 @@ function MyModal() {
   const triggerButton = useRef(null)
   const modalRootRef = useRef(null)
 
-  const { isOpen, toggle } = useModal({
+  const { isOpen, toggle, dialogRef } = useModal({
     // `triggerRef` allows the focus to shift to whatever triggered the modal
     triggerRef: triggerButton,
     // `hash` will automatically open the modal when hash changes and will also update the hash when the modal opens/closes
     hash: "modal-with-hash",
-  })
-
-  const { render, animate } = useAnimatePresence({
-    isVisible: isOpen,
-    duration: 800
   })
 
   return (
@@ -136,14 +125,11 @@ function MyModal() {
       </button>
       <div ref={modalRootRef}></div>
 
-      {render && modalRootRef.current && (
-        <Modal 
+      {isOpen && modalRootRef.current && (
+        <Modal
+          dialogRef={dialogRef}
           renderTo={modalRootRef.current}
-          style={{
-          transition: `opacity 800ms ease-in-out`,
-          opacity: animate ? 1 : 0
-        }}>
-          <ModalBackdrop onClick={toggle} />
+        >
           <ModalContent>
             <button onClick={toggle}>
               Close
@@ -165,17 +151,14 @@ function MyModal() {
 | -------------------- | --------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | renderTo         | HTMLElement   | null | If a valid HTMLElement is provided, the modal will be appended to that element. Otherwise will be rendered in place.                                                                                       |
 | className            | String    | null          |                                                                                                                                                                                                                                                                                                        |
+| dialogRef            | RefObject | null          | The ref returned by `useModal`, used to associate the hook with this specific native dialog.                                                                                                                                                                                                         |
 | children            | ReactNode | null          |                                                                                                                                                                                                                                                                                                        |
+
+The native dialog backdrop is styled with the `::backdrop` pseudo-element. Clicking the backdrop closes the modal automatically.
 
 ### `<ModalContent>`
 
-A wrapper for the modal's content. This component is optional, but it's recommended to use it for styling purposes.
-
-Any valid `<div>` props can be passed to this component.
-
-### `<ModalBackdrop>`
-
-A wrapper for the modal's backdrop. This component is optional, but it's recommended to use it for styling purposes.
+A required wrapper for the modal's content. It also defines the content boundary used to distinguish backdrop interactions from clicks inside the modal.
 
 Any valid `<div>` props can be passed to this component.
 
@@ -196,9 +179,9 @@ You can override these as you see fit and as your setup allows.
 
 This component was built with focus accessibility best-practices at top-of-mind, and provides enough flexibility to allow you to create an accessible modal window.
 
-### Focus loop
+### Focus trap
 
-There are hidden elements at the start and end of the modal component, which, on focus, shift the user's focus to either the end or start of the content, respectively.
+The modal uses the native `<dialog>` element with the `showModal()` method, which automatically traps focus within the dialog. This ensures keyboard navigation stays within the modal while it is open.
 
 ### Focus on close
 
