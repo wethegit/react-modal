@@ -89,10 +89,10 @@
     "stylelint-config-standard": "^34.0.0",
     "stylelint-config-standard-scss": "^11.1.0",
     "stylelint-order": "^6.0.3",
-    "stylelint-selector-bem-pattern": "^2.1.1",
+    "stylelint-selector-bem-pattern": "^5.0.0",
     "typescript": "~5.7.3",
-    "vite": "^4.3.2",
-    "vite-plugin-dts": "~3.9.1"
+    "vite": "^8.3.5",
+    "vite-plugin-dts": "~5.1.2"
   },
   "peerDependencies": {
     "react": "17 - 19",
@@ -100,6 +100,6 @@
   },
   "dependencies": {
     "@changesets/changelog-github": "~0.5.0",
-    "@changesets/cli": "~2.27.1"
+    "@changesets/cli": "~2.31.1"
   }
 }
