@@ -9,25 +9,34 @@ on:
       - types/**
       - package.json
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   release:
+    runs-on: ubuntu-latest
     permissions:
       contents: write       # to create release (changesets/action)
       issues: write         # to post issue comments (changesets/action)
       pull-requests: write  # to create pull request (changesets/action)
-
-    name: Release
-    runs-on: ubuntu-latest
+      id-token: write
+    env:
+      HUSKY: 0
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version-file: '.nvmrc'
+          registry-url: https://registry.npmjs.org
 
       - name: Install Dependencies
         run: npm i
@@ -38,12 +47,16 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        uses: changesets/action@v1
+      - name: Create release pull request or publish
+        uses: changesets/action@v2
         with:
-          version: npm run version
-          publish: npm run release
+          github-token: ${{ github.token }}
+          version-script: npm run version
+          publish-script: npm run release
+          commit-message: 'chore: release packages'
+          pr-title: 'chore: release packages'
+          create-github-releases: true
+          push-git-tags: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # Read by @changesets/changelog-github to link PRs and authors
+          GITHUB_TOKEN: ${{ github.token }}
