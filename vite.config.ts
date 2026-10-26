@@ -5,15 +5,16 @@ import dts from "vite-plugin-dts"
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), dts({ rollupTypes: true, include: ["src/lib"] })],
+  plugins: [react(), dts({ bundleTypes: true, include: ["src/lib"] })],
   build: {
     copyPublicDir: false,
     target: "esnext",
     lib: {
       // Could also be a dictionary or array of multiple entry points
       // eslint-disable-next-line no-undef
-      entry: resolve(__dirname, "src/lib/index.ts"),
+      entry: resolve(import.meta.dirname, "src/lib/index.ts"),
       name: "ReactModal",
+      cssFileName: "style",
       formats: ["es", "cjs"],
     },
     rollupOptions: {
