@@ -12,7 +12,7 @@ export default defineConfig({
     lib: {
       // Could also be a dictionary or array of multiple entry points
       // eslint-disable-next-line no-undef
-      entry: resolve(__dirname, "src/lib/index.ts"),
+      entry: resolve(import.meta.dirname, "src/lib/index.ts"),
       name: "ReactModal",
       cssFileName: "style",
       formats: ["es", "cjs"],
