@@ -27,7 +27,7 @@
 }
 
 .CustomModalTransition {
-  transition: transform 0.5s cubic-bezier(0.77, 0, 0.1, 1.39);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.77, 0, 0.1, 1.39);
   transform: scale(1);
 }
 
