@@ -95,9 +95,9 @@ function MyModal() {
 
 ## Full example
 
-Custom transition, focus management and hash-based state management.
+Focus management, rendering to a custom element, and hash-based state management.
 
-The [`@starting-style`](https://developer.mozilla.org/en-US/docs/Web/CSS/@starting-style) CSS at-rule lets you define entry animations with pure CSS — no extra JavaScript or animation libraries needed.
+The [`@starting-style`](https://developer.mozilla.org/en-US/docs/Web/CSS/@starting-style) CSS at-rule lets you define entry animations with pure CSS — no extra JavaScript or animation libraries needed. Exit animations using `useAnimatePresence` are not included in this refactor; support is deferred to [#155](https://github.com/wethegit/react-modal/issues/155). Render the modal conditionally with `isOpen`, without delaying unmount for an exit animation.
 
 ```jsx
 import { useRef } from 'react'
@@ -181,7 +181,7 @@ The native dialog backdrop is styled with the `::backdrop` pseudo-element. Click
 
 ### `<ModalContent>`
 
-A wrapper for the modal's content. This component is optional, but it's recommended to use it for styling purposes.
+A required wrapper for the modal's content. It also defines the content boundary used to distinguish backdrop interactions from clicks inside the modal.
 
 Any valid `<div>` props can be passed to this component.
 

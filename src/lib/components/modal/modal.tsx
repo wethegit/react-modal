@@ -3,10 +3,12 @@
 import { useEffect, useRef } from "react"
 import ReactDOM from "react-dom"
 import { classnames } from "../../../utils/classnames"
+import { ModalContent, type ModalContentProps } from "../modal-content/modal-content"
 
 import styles from "./modal.module.scss"
 
-export interface ModalProps extends React.DialogHTMLAttributes<HTMLDialogElement> {
+export interface ModalProps
+  extends Omit<React.DialogHTMLAttributes<HTMLDialogElement>, "children"> {
   /**
    * The modal will be appended to the passed element instead of being rendered in place
    * @defaultValue defaults inPlace
@@ -16,6 +18,7 @@ export interface ModalProps extends React.DialogHTMLAttributes<HTMLDialogElement
    * A ref to the native dialog element.
    */
   dialogRef?: { readonly current: HTMLDialogElement | null }
+  children: React.ReactElement<ModalContentProps, typeof ModalContent>
 }
 
 export function Modal({
@@ -24,19 +27,36 @@ export function Modal({
   className,
   onCancel,
   onClick,
+  onPointerDown,
+  onPointerUp,
+  onPointerCancel,
   children,
   ...props
 }: ModalProps) {
   const internalDialogRef = useRef<HTMLDialogElement>(null)
+  const pointerDownRef = useRef<{ pointerId: number; outsideContent: boolean } | null>(
+    null
+  )
+  const dismissOnClickRef = useRef(false)
   const dialogRef = forwardedDialogRef ?? internalDialogRef
 
   useEffect(() => {
     if (dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal()
-  }, [dialogRef])
+  }, [dialogRef, renderTo])
+
+  const isOutsideContent = (event: React.PointerEvent<HTMLDialogElement>) => {
+    const path = event.nativeEvent.composedPath()
+    return (
+      path.includes(event.currentTarget) &&
+      !path.includes(event.currentTarget.firstElementChild as Element)
+    )
+  }
 
   const handleClick = (event: React.MouseEvent<HTMLDialogElement>) => {
     onClick?.(event)
-    if (event.target === event.currentTarget && !event.defaultPrevented) {
+    const shouldDismiss = event.detail > 0 && dismissOnClickRef.current
+    dismissOnClickRef.current = false
+    if (shouldDismiss && !event.defaultPrevented) {
       dialogRef.current?.close()
     }
   }
@@ -47,10 +67,27 @@ export function Modal({
       ref={dialogRef as React.RefObject<HTMLDialogElement>}
       {...props}
       onClick={handleClick}
-      onCancel={(event) => {
-        event.preventDefault()
-        onCancel?.(event)
+      onPointerDown={(event) => {
+        onPointerDown?.(event)
+        pointerDownRef.current = {
+          pointerId: event.pointerId,
+          outsideContent: isOutsideContent(event),
+        }
       }}
+      onPointerUp={(event) => {
+        onPointerUp?.(event)
+        const pointerDown = pointerDownRef.current
+        dismissOnClickRef.current =
+          pointerDown?.pointerId === event.pointerId &&
+          pointerDown.outsideContent &&
+          isOutsideContent(event)
+        pointerDownRef.current = null
+      }}
+      onPointerCancel={(event) => {
+        onPointerCancel?.(event)
+        pointerDownRef.current = null
+      }}
+      onCancel={onCancel}
     >
       {children}
     </dialog>
