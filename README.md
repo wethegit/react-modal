@@ -27,7 +27,7 @@ import "@wethegit/react-modal/style.css"
 
 The `useModal` hook provides mechanisms for hooking into the modal state. Pass its `dialogRef` to `<Modal>` so the hook can control that specific dialog's native modality. This approach allows us to abstract away state management, which becomes especially useful when [using a URL hash to manage the modal's state](#using-a-url-hash-to-manage-the-modal-state).
 
-The snippet below demonstrates the **minimum** required setup. No focus management, no animations.
+The snippet below demonstrates the **minimum** required setup. Keep `<Modal>` mounted and pass `isOpen` so the native dialog can close without being unmounted.
 
 ```jsx
 import {
@@ -45,14 +45,12 @@ function MyModal() {
         Open the modal window!
       </button>
 
-      {isOpen && (
-        <Modal dialogRef={dialogRef}>
-          <ModalContent>
-            <button onClick={toggle}>Close</button>
-            <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
-          </ModalContent>
-        </Modal>
-      )}
+      <Modal dialogRef={dialogRef} isOpen={isOpen}>
+        <ModalContent>
+          <button onClick={toggle}>Close</button>
+          <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
+        </ModalContent>
+      </Modal>
     </>
   )
 }
@@ -80,14 +78,12 @@ function MyModal() {
         Open the modal window!
       </button>
 
-      {isOpen && (
-        <Modal dialogRef={dialogRef}>
-          <ModalContent>
-            <button onClick={toggle}>Close</button>
-            <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
-          </ModalContent>
-        </Modal>
-      )}
+      <Modal dialogRef={dialogRef} isOpen={isOpen}>
+        <ModalContent>
+          <button onClick={toggle}>Close</button>
+          <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
+        </ModalContent>
+      </Modal>
     </>
   )
 }
@@ -97,7 +93,7 @@ function MyModal() {
 
 Focus management, rendering to a custom element, and hash-based state management.
 
-**Important:** Animation with `useAnimatePresence` is not included in this refactor. Support is deferred to [#155](https://github.com/wethegit/react-modal/issues/155). Render the modal conditionally with `isOpen`, without delaying unmount for an exit animation.
+The [`@starting-style`](https://developer.mozilla.org/en-US/docs/Web/CSS/@starting-style) CSS at-rule lets you define entry animations with pure CSS. Keep `<Modal>` mounted and pass `isOpen` to let the native dialog close normally; in supporting browsers, CSS can animate its exit using discrete transitions for `display` and `overlay`.
 
 ```jsx
 import { useRef } from 'react'
@@ -106,6 +102,8 @@ import {
   ModalContent,
   useModal
 } from "@wethegit/react-modal"
+
+import styles from "./my-styles.module.css"
 
 function MyModal() {
   const triggerButton = useRef(null)
@@ -125,21 +123,62 @@ function MyModal() {
       </button>
       <div ref={modalRootRef}></div>
 
-      {isOpen && modalRootRef.current && (
-        <Modal
-          dialogRef={dialogRef}
-          renderTo={modalRootRef.current}
-        >
-          <ModalContent>
-            <button onClick={toggle}>
-              Close
-            </button>
-            <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
-          </ModalContent>
-        </Modal>
-      )}
+      <Modal
+        dialogRef={dialogRef}
+        isOpen={isOpen}
+        renderTo={modalRootRef.current ?? undefined}
+        className={styles.modalOverlay}
+      >
+        <ModalContent className={styles.modal}>
+          <button onClick={toggle}>
+            Close
+          </button>
+          <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
+        </ModalContent>
+      </Modal>
     </>
   )
+}
+```
+
+```css
+/* my-styles.module.css */
+.modalOverlay::backdrop {
+  background: rgb(0 0 0 / 80%);
+}
+
+.modalOverlay {
+  opacity: 0;
+  transition:
+    opacity 0.5s ease,
+    display 0.5s allow-discrete,
+    overlay 0.5s allow-discrete;
+}
+
+.modalOverlay[open] {
+  opacity: 1;
+}
+
+.modal {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  opacity: 1;
+  transform: scale(1);
+}
+
+.modalOverlay:not([open]) .modal {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+@starting-style {
+  .modalOverlay[open] {
+    opacity: 0;
+  }
+
+  .modal {
+    opacity: 0;
+    transform: scale(0.9);
+  }
 }
 ```
 
@@ -152,6 +191,7 @@ function MyModal() {
 | renderTo         | HTMLElement   | null | If a valid HTMLElement is provided, the modal will be appended to that element. Otherwise will be rendered in place.                                                                                       |
 | className            | String    | null          |                                                                                                                                                                                                                                                                                                        |
 | dialogRef            | RefObject | null          | The ref returned by `useModal`, used to associate the hook with this specific native dialog.                                                                                                                                                                                                         |
+| isOpen               | Boolean   | —             | Controls the native dialog's open state. Keep `<Modal>` mounted to allow CSS exit transitions.                                                                                                                                                                                                         |
 | children            | ReactNode | null          |                                                                                                                                                                                                                                                                                                        |
 
 The native dialog backdrop is styled with the `::backdrop` pseudo-element. Clicking the backdrop closes the modal automatically.

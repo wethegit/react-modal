@@ -13,7 +13,11 @@ export interface ModalProps
    * The modal will be appended to the passed element instead of being rendered in place
    * @defaultValue defaults inPlace
    **/
-  renderTo: HTMLElement
+  renderTo?: HTMLElement
+  /**
+   * Controls whether the native dialog is open. When omitted, the dialog opens on mount.
+   */
+  isOpen?: boolean
   /**
    * A ref to the native dialog element.
    */
@@ -23,6 +27,7 @@ export interface ModalProps
 
 export function Modal({
   renderTo,
+  isOpen,
   dialogRef: forwardedDialogRef,
   className,
   onCancel,
@@ -41,8 +46,15 @@ export function Modal({
   const dialogRef = forwardedDialogRef ?? internalDialogRef
 
   useEffect(() => {
-    if (dialogRef.current && !dialogRef.current.open) dialogRef.current.showModal()
-  }, [dialogRef, renderTo])
+    const dialog = dialogRef.current
+    if (!dialog) return
+
+    if (isOpen === false) {
+      if (dialog.open) dialog.close()
+    } else if (!dialog.open) {
+      dialog.showModal()
+    }
+  }, [dialogRef, isOpen, renderTo])
 
   const isOutsideContent = (event: React.PointerEvent<HTMLDialogElement>) => {
     const path = event.nativeEvent.composedPath()
