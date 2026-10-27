@@ -1,5 +1,11 @@
 # @wethegit/react-modal
 
+## 4.2.0
+
+### Minor Changes
+
+- [#155](https://github.com/wethegit/react-modal/pull/155) [`014aa13`](https://github.com/wethegit/react-modal/commit/014aa138c71285822092a05564d7b06ad24f2994) Thanks [@copilot-swe-agent](https://github.com/apps/copilot-swe-agent)! - Add native CSS entry and exit transitions
+
 ## 4.1.0
 
 ### Minor Changes
