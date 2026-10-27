@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react"
+import React, { useRef, useState } from "react"
 import { createRoot } from "react-dom/client"
 
 import { Modal, ModalContent, useModal } from "./lib"
@@ -7,7 +7,7 @@ import styles from "./main.module.css"
 
 function CustomModal() {
   const triggerButton = useRef(null)
-  const modalRootRef = useRef(null)
+  const [modalRoot, setModalRoot] = useState<HTMLElement | null>(null)
   const { isOpen, toggle, dialogRef } = useModal({
     triggerRef: triggerButton,
   })
@@ -18,34 +18,30 @@ function CustomModal() {
       <button ref={triggerButton} onClick={toggle}>
         Open the modal (HTMLElement)
       </button>
-      <div ref={modalRootRef}></div>
+      <div ref={setModalRoot}></div>
 
-      {isOpen && modalRootRef.current && (
-        <Modal
-          renderTo={modalRootRef.current}
-          dialogRef={dialogRef}
-          className={styles.CustomModalOverlay}
+      <Modal
+        renderTo={modalRoot ?? undefined}
+        dialogRef={dialogRef}
+        isOpen={isOpen}
+        className={styles.CustomModalOverlay}
+      >
+        <ModalContent
+          className={`${styles.CustomModalContent} ${styles.CustomModalTransition}`}
         >
-          <ModalContent className={styles.CustomModalContent}>
-            <button onClick={toggle}>Close</button>
-            <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
-          </ModalContent>
-        </Modal>
-      )}
+          <button onClick={toggle}>Close</button>
+          <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
+        </ModalContent>
+      </Modal>
     </>
   )
 }
 
 function CustomModalOnBody() {
   const triggerButton = useRef(null)
-  const bodyRef = useRef<HTMLElement | null>(null)
   const { isOpen, toggle, dialogRef } = useModal({
     triggerRef: triggerButton,
   })
-
-  useEffect(() => {
-    bodyRef.current = document.body
-  }, [])
 
   return (
     <>
@@ -54,25 +50,24 @@ function CustomModalOnBody() {
         Open the modal (Append to body)
       </button>
 
-      {isOpen && bodyRef.current && (
-        <Modal
-          renderTo={bodyRef.current}
-          dialogRef={dialogRef}
-          className={styles.CustomModalOverlay}
-        >
-          <ModalContent className={styles.CustomModalContent}>
-            <button onClick={toggle}>Close</button>
-            <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
-          </ModalContent>
-        </Modal>
-      )}
+      <Modal
+        renderTo={document.body}
+        dialogRef={dialogRef}
+        isOpen={isOpen}
+        className={styles.CustomModalOverlay}
+      >
+        <ModalContent className={styles.CustomModalContent}>
+          <button onClick={toggle}>Close</button>
+          <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
+        </ModalContent>
+      </Modal>
     </>
   )
 }
 
 function ModalWithHash() {
   const triggerButton = useRef(null)
-  const modalRootRef = useRef(null)
+  const [modalRoot, setModalRoot] = useState<HTMLElement | null>(null)
   const { isOpen, toggle, dialogRef } = useModal({
     triggerRef: triggerButton,
     hash: "modal-with-hash",
@@ -83,20 +78,19 @@ function ModalWithHash() {
       <button ref={triggerButton} onClick={toggle}>
         Open the modal using a hash
       </button>
-      <div ref={modalRootRef}></div>
+      <div ref={setModalRoot}></div>
 
-      {isOpen && modalRootRef.current && (
-        <Modal
-          renderTo={modalRootRef.current}
-          dialogRef={dialogRef}
-          className={styles.CustomModalOverlay}
-        >
-          <ModalContent className={styles.CustomModalContent}>
-            <button onClick={toggle}>Close</button>
-            <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
-          </ModalContent>
-        </Modal>
-      )}
+      <Modal
+        renderTo={modalRoot ?? undefined}
+        dialogRef={dialogRef}
+        isOpen={isOpen}
+        className={styles.CustomModalOverlay}
+      >
+        <ModalContent className={styles.CustomModalContent}>
+          <button onClick={toggle}>Close</button>
+          <p>Voluptate Lorem ut minim excepteur sit fugiat anim magna aliquip.</p>
+        </ModalContent>
+      </Modal>
     </>
   )
 }
