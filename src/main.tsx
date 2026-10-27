@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react"
+import React, { useRef, useState } from "react"
 import { createRoot } from "react-dom/client"
 
 import { Modal, ModalContent, useModal } from "./lib"
@@ -39,14 +39,9 @@ function CustomModal() {
 
 function CustomModalOnBody() {
   const triggerButton = useRef(null)
-  const [body, setBody] = useState<HTMLElement | null>(null)
   const { isOpen, toggle, dialogRef } = useModal({
     triggerRef: triggerButton,
   })
-
-  useEffect(() => {
-    setBody(document.body)
-  }, [])
 
   return (
     <>
@@ -56,7 +51,7 @@ function CustomModalOnBody() {
       </button>
 
       <Modal
-        renderTo={body ?? undefined}
+        renderTo={document.body}
         dialogRef={dialogRef}
         isOpen={isOpen}
         className={styles.CustomModalOverlay}
