@@ -1,5 +1,11 @@
 # @wethegit/react-modal
 
+## 4.1.0
+
+### Minor Changes
+
+- [#168](https://github.com/wethegit/react-modal/pull/168) [`6d5e836`](https://github.com/wethegit/react-modal/commit/6d5e836ff0005565a0036363d244b299b2ff56e1) Thanks [@dependabot](https://github.com/apps/dependabot)! - Update dependencies to their latest compatible versions.
+
 ## 4.0.0
 
 ### Major Changes
