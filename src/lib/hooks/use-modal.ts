@@ -26,9 +26,12 @@ export function useModal(props: UseModalOptions = {}) {
     stateRef.current = ModalStates.CLOSED
     setState(ModalStates.CLOSED)
 
-    if (hash && window && window.location.hash === `#${hash}`) {
-      window.location.hash = ""
-      window.history.replaceState({}, "", window.location.pathname)
+    if (hash && typeof window !== "undefined" && window.location.hash === `#${hash}`) {
+      window.history.replaceState(
+        {},
+        "",
+        window.location.pathname + window.location.search
+      )
     }
 
     if (triggerRef && triggerRef.current) triggerRef.current.focus()
@@ -64,8 +67,8 @@ export function useModal(props: UseModalOptions = {}) {
     stateRef.current = ModalStates.OPEN
     setState(ModalStates.OPEN)
 
-    if (hash && window.location.hash !== `#${hash}`) {
-      window.location.hash = `#${hash}`
+    if (hash && typeof window !== "undefined" && window.location.hash !== `#${hash}`) {
+      window.history.pushState({}, "", `#${hash}`)
     }
   }, [hash])
 
@@ -86,10 +89,15 @@ export function useModal(props: UseModalOptions = {}) {
     // Check for a hash on mount
     handleHashChange()
 
+    // hashchange fires when navigating to same-page anchors (e.g. <a href="#hash">)
     window.addEventListener("hashchange", handleHashChange)
+    // popstate fires when navigating via browser history (back/forward),
+    // which is what history.pushState entries use
+    window.addEventListener("popstate", handleHashChange)
 
     return () => {
       window.removeEventListener("hashchange", handleHashChange)
+      window.removeEventListener("popstate", handleHashChange)
     }
   }, [handleClose, handleOpen, hash])
 
