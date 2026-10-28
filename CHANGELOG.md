@@ -1,5 +1,11 @@
 # @wethegit/react-modal
 
+## 4.3.0
+
+### Minor Changes
+
+- [#153](https://github.com/wethegit/react-modal/pull/153) [`b2da150`](https://github.com/wethegit/react-modal/commit/b2da150ded628128b43f8d37221373f289f6d2fe) Thanks [@copilot-swe-agent](https://github.com/apps/copilot-swe-agent)! - Use the History API (`pushState`/`replaceState`) instead of directly assigning `window.location.hash` when opening and closing hash-linked modals. This prevents Safari from scrolling the user to the top of the page. Also adds a `popstate` listener so browser back/forward navigation correctly opens and closes the modal.
+
 ## 4.2.0
 
 ### Minor Changes
