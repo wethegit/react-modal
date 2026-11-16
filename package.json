@@ -81,7 +81,7 @@
     "lint-staged": "^17.6.0",
     "postcss": "^8.5.32",
     "postcss-scss": "^4.0.9",
-    "prettier": "~3.9.10",
+    "prettier": "~3.10.1",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "sass": "^1.106.1",
